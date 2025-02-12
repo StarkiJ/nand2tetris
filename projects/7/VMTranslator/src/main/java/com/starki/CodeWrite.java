@@ -153,12 +153,74 @@ public class CodeWrite {
 
     // 将给定的command（命令类型为C_PUSH或C_POP）所对应的汇编代码写入至输出
     public void writePushPop(String command, String segment, int index) {
-        writer.println("// " + command + " " + segment + " " + index);
-
+        if (command.equals("C_PUSH")) {
+            writer.println("// push " + segment + " " + index);
+            // 根据segment的值，获取要压入栈的数据
+            switch (segment) {
+                case "constant":
+                    writer.println("@" + index);
+                    writer.println("D=A");
+                    break;
+                case "local":
+                    break;
+                case "argument":
+                    break;
+                case "this":
+                    break;
+                case "that":
+                    break;
+                case "pointer":
+                    break;
+                case "temp":
+                    break;
+                case "static":
+                    break;
+                default:
+                    System.err.println("Invalid segment: " + segment);
+                    break;
+            }
+            // 将目标数据压入栈中，并更新栈顶指针
+            writer.println("@SP");
+            writer.println("A=M");
+            writer.println("M=D");
+            writer.println("@SP");
+            writer.println("M=M+1");
+        } else if (command.equals("C_POP")) {
+            writer.println("// pop " + segment + " " + index);
+            // 从栈顶弹出数据，并更新栈顶指针
+            writer.println("@SP");
+            writer.println("AM=M-1");
+            writer.println("D=M");
+            // 根据segment的值，将数据存储到相应的位置
+            switch (segment) {
+                case "local":
+                    break;
+                case "argument":
+                    break;
+                case "this":
+                    break;
+                case "that":
+                    break;
+                case "pointer":
+                    break;
+                case "temp":
+                    break;
+                case "static":
+                    break;
+                default:
+                    System.err.println("Invalid segment: " + segment);
+                    break;
+            }
+        } else {
+            System.err.println("Invalid command: " + command);
+        }
     }
 
     // 关闭输出文件
     public void close() {
-        // 关闭输出文件
+        writer.println("(END)");
+        writer.println("@END");
+        writer.println("0;JMP");
+        writer.close();
     }
 }

@@ -1,5 +1,5 @@
-@R0
-AM=M-1
-D=M
 @R1
-M=D
+D=M
+@R0
+M=D-M
+M=!M

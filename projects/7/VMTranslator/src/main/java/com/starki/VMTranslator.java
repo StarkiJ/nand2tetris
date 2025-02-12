@@ -1,12 +1,10 @@
 package com.starki;
 
-import java.io.FileNotFoundException;
-
 public class VMTranslator {
     public static void main(String[] args) {
         // 确保传入的参数是有效的文件路径
         if (args.length != 1) {
-            System.err.println("Usage: java VMTranslator <VM file path>");
+            System.err.println("Usage: java com.starki.VMTranslator <VM file path>");
             return;
         }
 
@@ -14,7 +12,7 @@ public class VMTranslator {
 
         if (!filePath.endsWith(".vm"))// 检查文件路径是否以.vm结尾
         {
-            System.err.println("Error: Invalid file path - " + filePath);
+            System.err.println("Error: Invalid VM file - " + filePath);
             return;
         }
 
@@ -42,5 +40,6 @@ public class VMTranslator {
 
         // 完成所有命令翻译后，关闭文件流
         codeWriter.close();
+        System.out.println("Translation completed successfully.");
     }
 }
