@@ -2,6 +2,7 @@ package com.starki;
 
 public class VMTranslator {
     public static void main(String[] args) {
+        args = new String[]{"D:\\code\\nand2tetris\\projects\\7\\MemoryAccess\\StaticTest\\StaticTest.vm"};
         // 确保传入的参数是有效的文件路径
         if (args.length != 1) {
             System.err.println("Usage: java com.starki.VMTranslator <VM file path>");
