@@ -306,4 +306,52 @@ public class CodeWrite {
         writer.println("0;JMP");
         writer.close();
     }
+
+    // 编写执行VM初始化的汇编代码，也称为引导程序代码。该代码必须被置于输出文件的开头
+    public void writeInit() {
+        writer.println("// init");
+        writer.println("@256");
+        writer.println("D=A");
+        writer.println("@SP");
+        writer.println("M=D");
+        writeCall("Sys.init", 0);
+    }
+
+    // 编写执行label命令的汇编代码
+    public void writeLabel(String label) {
+        writer.println("// label " + label);
+        writer.println("(" + label + ")");
+    }
+
+    // 编写执行goto命令的汇编代码
+    public void writeGoto(String label) {
+        writer.println("// goto " + label);
+        writer.println("@" + label);
+        writer.println("0;JMP");
+    }
+
+    // 编写执行if-goto命令的汇编代码
+    public void writeIf(String label) {
+        writer.println("// if-goto " + label);
+        writer.println("@SP");
+        writer.println("AM=M-1");
+        writer.println("D=M");
+        writer.println("@" + label);
+        writer.println("D;JNE");
+    }
+
+    // 编写执行call命令的汇编代码
+    public void writeCall(String functionName, int numArgs) {
+        writer.println("// call " + functionName + " " + numArgs);
+    }
+
+    // 编写执行return命令的汇编代码
+    public void writeReturn() {
+        writer.println("// return");
+    }
+
+    // 编写执行function命令的汇编代码
+    public void writeFunction(String functionName, int numLocals) {
+        writer.println("// function " + functionName + " " + numLocals);
+    }
 }
