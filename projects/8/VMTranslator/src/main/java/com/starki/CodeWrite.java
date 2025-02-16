@@ -4,17 +4,14 @@ import java.io.*;
 
 public class CodeWrite {
     private PrintWriter writer;
-    private String filePath;
     private String fileName;
-    private int count = 0;
+    private int labelId = 0;
 
     // 构造函数，打开输出文件/输出流，准备进行写入
     public CodeWrite(String fileName) {
-        // 打开输出文件
-        // 打开输出流
+        // 打开输出文件,输出流
         try {
-            setFileName(fileName);
-            this.writer = new PrintWriter(new BufferedWriter(new FileWriter(this.filePath)));
+            this.writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
         } catch (IOException e) {
             System.err.println("Error opening output file: " + e.getMessage());
         }
@@ -22,8 +19,8 @@ public class CodeWrite {
 
     // 通知代码写入程序，新的VM文件翻译过程已经开始
     public void setFileName(String fileName) {
-        this.filePath = fileName.substring(0, fileName.lastIndexOf(".")) + ".asm";
         this.fileName = fileName.substring(fileName.lastIndexOf("\\") + 1, fileName.lastIndexOf("."));
+        System.out.println("File Translate: VM file - " + this.fileName);
     }
 
     // 将给定的算术操作所对应的汇编代码写至输出
@@ -63,21 +60,21 @@ public class CodeWrite {
                 writer.println("A=M-1");
                 writer.println("D=M-D");
                 // if (x==y) goto EQ_TRUE
-                writer.println("@EQ_TRUE_" + count);
+                writer.println("@EQ_TRUE_" + labelId);
                 writer.println("D;JEQ");
                 // else x=0
                 writer.println("@SP");
                 writer.println("A=M-1");
                 writer.println("M=0");
                 // goto EQ_END
-                writer.println("@EQ_END_" + count);
+                writer.println("@EQ_END_" + labelId);
                 writer.println("0;JMP");
                 // EQ_TRUE: x=1(全1)
-                writer.println("(EQ_TRUE_" + count + ")");
+                writer.println("(EQ_TRUE_" + labelId + ")");
                 writer.println("@SP");
                 writer.println("A=M-1");
                 writer.println("M=-1");
-                writer.println("(EQ_END_" + (count++) + ")");
+                writer.println("(EQ_END_" + (labelId++) + ")");
                 break;
             case "gt":// x=(x>y)
                 writer.println("@SP");
@@ -86,18 +83,18 @@ public class CodeWrite {
                 writer.println("@SP");
                 writer.println("A=M-1");
                 writer.println("D=M-D");
-                writer.println("@GT_TRUE_" + count);
+                writer.println("@GT_TRUE_" + labelId);
                 writer.println("D;JGT");
                 writer.println("@SP");
                 writer.println("A=M-1");
                 writer.println("M=0");
-                writer.println("@GT_END_" + count);
+                writer.println("@GT_END_" + labelId);
                 writer.println("0;JMP");
-                writer.println("(GT_TRUE_" + count + ")");
+                writer.println("(GT_TRUE_" + labelId + ")");
                 writer.println("@SP");
                 writer.println("A=M-1");
                 writer.println("M=-1");
-                writer.println("(GT_END_" + (count++) + ")");
+                writer.println("(GT_END_" + (labelId++) + ")");
                 break;
             case "lt":// x=(x<y)
                 writer.println("@SP");
@@ -106,18 +103,18 @@ public class CodeWrite {
                 writer.println("@SP");
                 writer.println("A=M-1");
                 writer.println("D=M-D");
-                writer.println("@LT_TRUE_" + count);
+                writer.println("@LT_TRUE_" + labelId);
                 writer.println("D;JLT");
                 writer.println("@SP");
                 writer.println("A=M-1");
                 writer.println("M=0");
-                writer.println("@LT_END_" + count);
+                writer.println("@LT_END_" + labelId);
                 writer.println("0;JMP");
-                writer.println("(LT_TRUE_" + count + ")");
+                writer.println("(LT_TRUE_" + labelId + ")");
                 writer.println("@SP");
                 writer.println("A=M-1");
                 writer.println("M=-1");
-                writer.println("(LT_END_" + (count++) + ")");
+                writer.println("(LT_END_" + (labelId++) + ")");
                 break;
             case "and":// x=x&y
                 writer.println("@SP");
@@ -301,8 +298,8 @@ public class CodeWrite {
 
     // 关闭输出文件
     public void close() {
-        writer.println("(END)");
-        writer.println("@END");
+        writer.println("(TRANSLATE_END_" + labelId + ")");
+        writer.println("@TRANSLATE_END_" + labelId);
         writer.println("0;JMP");
         writer.close();
     }
@@ -343,15 +340,107 @@ public class CodeWrite {
     // 编写执行call命令的汇编代码
     public void writeCall(String functionName, int numArgs) {
         writer.println("// call " + functionName + " " + numArgs);
+
+        // push return-address
+        writer.println("@" + "RETURN_ADDRESS_" + labelId);
+        writer.println("D=A");
+        writer.println("@SP");
+        writer.println("A=M");
+        writer.println("M=D");
+        writer.println("@SP");
+        writer.println("M=M+1");
+        // push LCL, ARG, THIS, THAT
+        for (String segment : new String[]{"LCL", "ARG", "THIS", "THAT"}) {
+            writer.println("@" + segment);
+            writer.println("D=M");
+            writer.println("@SP");
+            writer.println("A=M");
+            writer.println("M=D");
+            writer.println("@SP");
+            writer.println("M=M+1");
+        }
+        // ARG=SP-numArgs-5
+        writer.println("@SP");
+        writer.println("D=M");
+        writer.println("@" + (numArgs + 5));
+        writer.println("D=D-A");
+        writer.println("@ARG");
+        writer.println("M=D");
+        // LCL=SP
+        writer.println("@SP");
+        writer.println("D=M");
+        writer.println("@LCL");
+        writer.println("M=D");
+        // goto f
+        writer.println("@" + functionName);
+        writer.println("0;JMP");
+        // (return-address) (返回地址依靠声明标签实现)
+        writer.println("(RETURN_ADDRESS_" + (labelId++) + ")");
     }
 
     // 编写执行return命令的汇编代码
     public void writeReturn() {
         writer.println("// return");
+        // FRAME=LCL (临时变量FRAME用R13暂存)
+        writer.println("@LCL");
+        writer.println("D=M");
+        writer.println("@13");
+        writer.println("M=D");
+        // RET=*(FRAME-5) (临时变量RET用R14暂存)
+        writer.println("@5");
+        writer.println("A=D-A");
+        writer.println("D=M");
+        writer.println("@R14");
+        writer.println("M=D");
+        // *ARG=pop()
+        writer.println("@SP");
+        writer.println("AM=M-1");
+        writer.println("D=M");
+        writer.println("@ARG");
+        writer.println("A=M");
+        writer.println("M=D");
+        // SP=ARG+1
+        writer.println("@ARG");
+        writer.println("D=M+1");
+        writer.println("@SP");
+        writer.println("M=D");
+        // THAT=*(FRAME-1), THIS=*(FRAME-2), ARG=*(FRAME-3), LCL=*(FRAME-4)
+        for (int i = 0; i < 4; i++) {
+            writer.println("@R13");
+            writer.println("AM=M-1");
+            writer.println("D=M");
+            switch (i) {
+                case 0:
+                    writer.println("@THAT");
+                    break;
+                case 1:
+                    writer.println("@THIS");
+                    break;
+                case 2:
+                    writer.println("@ARG");
+                    break;
+                case 3:
+                    writer.println("@LCL");
+                    break;
+            }
+            writer.println("M=D");
+        }
+        // goto RET
+        writer.println("@R14");
+        writer.println("A=M");
+        writer.println("0;JMP");
     }
 
     // 编写执行function命令的汇编代码
     public void writeFunction(String functionName, int numLocals) {
         writer.println("// function " + functionName + " " + numLocals);
+        writer.println("(" + functionName + ")");
+        for (int i = 0; i < numLocals; i++) {
+            writer.println("@SP");
+            writer.println("A=M");
+            writer.println("M=0");
+            writer.println("@SP");
+            writer.println("M=M+1");
+        }
     }
 }
