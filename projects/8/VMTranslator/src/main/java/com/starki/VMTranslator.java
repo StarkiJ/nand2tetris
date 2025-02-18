@@ -6,7 +6,7 @@ public class VMTranslator {
     public static void main(String[] args) {
         // 如果未传入参数，使用默认文件路径
         if (args.length == 0) {
-            args = new String[]{"..\\ProgramFlow\\BasicLoop\\BasicLoop.vm"};
+            args = new String[]{"..\\FunctionCalls\\SimpleFunction\\SimpleFunction.vm"};
         }
 
         // 确保传入的参数是有效的文件路径

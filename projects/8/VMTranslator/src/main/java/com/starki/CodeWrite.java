@@ -405,24 +405,11 @@ public class CodeWrite {
         writer.println("@SP");
         writer.println("M=D");
         // THAT=*(FRAME-1), THIS=*(FRAME-2), ARG=*(FRAME-3), LCL=*(FRAME-4)
-        for (int i = 0; i < 4; i++) {
+        for (String segment : new String[]{"THAT", "THIS", "ARG", "LCL"}) {
             writer.println("@R13");
             writer.println("AM=M-1");
             writer.println("D=M");
-            switch (i) {
-                case 0:
-                    writer.println("@THAT");
-                    break;
-                case 1:
-                    writer.println("@THIS");
-                    break;
-                case 2:
-                    writer.println("@ARG");
-                    break;
-                case 3:
-                    writer.println("@LCL");
-                    break;
-            }
+            writer.println("@" + segment);
             writer.println("M=D");
         }
         // goto RET
