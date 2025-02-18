@@ -38,7 +38,8 @@ public class Parser {
         do {
             tmpLine = scanner.nextLine().trim();
         } while (tmpLine.isEmpty() || tmpLine.startsWith("//"));
-        currentCommand = tmpLine.replaceAll("//.*", "").trim().split(" ");
+        // 去掉注释并按空格划分命令，正则表达式"//.*"匹配任何以"//"开头的文本，"\s+"匹配一个及以上的空白字符
+        currentCommand = tmpLine.replaceAll("//.*", "").split("\\s+");
     }
 
     // 返回当前VM命令的类型，
