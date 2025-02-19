@@ -1,0 +1,164 @@
+/** Snake.jack */
+class Snake{
+
+    field Queue body;
+    field int px,py,hx,hy;
+    field int times;
+    field int size; // size of each square
+    field int length, maxLength, minLength; // length of snake
+    field int leftWall, rightWall, topWall, bottomWall;  // wall locations
+    field int direction; // 0:up, 1:right, 2:down, 3:left
+
+    /** Constructs a Snake. */
+    constructor Snake new(int ax, int ay, int AmaxLength, int AminLength, int ArightWall, int AbottomWall){
+        let body = Queue.new((AmaxLength+1) * 2);//Add first and subtract later, need one more space
+        let hx = ax;
+        let hy = ay;
+        let times = 0;
+        let size = 8;
+        let length = 8;
+        let maxLength = AmaxLength;
+        let minLength = AminLength;
+        let leftWall = 0;
+        let rightWall = (ArightWall / size)-1;
+        let topWall = 0;
+        let bottomWall = (AbottomWall / size)-1;
+        let direction = -1;
+        
+        // Initialize the snake position
+        let px = ax-3;
+        let py = ay;
+        do body.push(px);
+        do body.push(py);
+        let px = ax-2;
+        do body.push(px);
+        do body.push(py);
+        let px = ax-1;
+        do body.push(px);
+        do body.push(py);
+        let px = ax;
+        do body.push(px);
+        do body.push(py);
+        
+        do draw();
+
+        return this;
+    }
+
+    /** Deallocates the object's memory. */
+    method void dispose() {
+        do body.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void draw() {
+        // Draws the snake using the color black
+        var int tmpLen;
+        let tmpLen = body.size()/2;
+        do Screen.setColor(true);
+        while(tmpLen > 0){
+            let px = body.pop();
+            let py = body.pop();
+            do drawSnake(px, py);
+            do body.push(px);
+            do body.push(py);
+            let tmpLen = tmpLen - 1;
+        }
+        return;
+    }
+
+    /** Draws the snake with size */
+    method void drawSnake(int ax, int ay) {
+        do Screen.drawRectangle(ax*size, ay*size, (ax*size) + size, (ay*size) + size);
+        return;
+    }
+
+    /** Sets the direction of the snake */
+    method void setDirection(int Adirection) {
+        let direction = Adirection;
+        return;
+    }
+
+    //** Lengthens the snake */
+    method void lengthen(){
+        if(length<maxLength){
+            let length = length + 1;
+            //do Output.printInt(length);
+        }
+        return;
+    }
+
+    /**  Shrinks the snake */
+    method void shorten(){
+        if(length>minLength){
+            let length = length - 1;
+            //do Output.printInt(length);
+        }
+        return;
+    }
+
+    /** Gets the length of the snake */
+    method int getLength(){
+        return length;
+    }
+
+    /** Moves the snake picture */
+    method void drawMove(){
+        var int tmpLen;
+        do body.push(hx);
+        do body.push(hy);
+        do Screen.setColor(true);
+        do Output.moveCursor(10,27);
+        do drawSnake(hx, hy);
+        let tmpLen = body.size()/2;
+        while(tmpLen>length){        
+            let px = body.pop();
+            let py = body.pop();
+            do Screen.setColor(false);
+            do drawSnake(px, py);
+            let tmpLen = body.size()/2;
+        }
+        return;
+    }
+
+    /** Moves the snake in the given direction*/
+    method boolean move() {
+        if(direction = 0){
+            if(hy = topWall){ return true; }
+            else{
+                let hy = hy - 1;// move up
+                do drawMove();
+            }
+        }
+        else {
+            if(direction = 1){
+                if(hx = rightWall){ return true; }
+                else{
+                    let hx = hx + 1;// move right
+                    do drawMove();
+                }
+            }
+            else {
+                if(direction = 2){
+                    if(hy = bottomWall){ return true; }
+                    else{
+                        let hy = hy + 1;// move down
+                        do drawMove();
+                    }
+                }
+                else {
+                    if (direction = 3){
+                        if(hx = leftWall){ return true; }
+                        else{                        
+                            let hx = hx - 1;// move left
+                            do drawMove();
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+}

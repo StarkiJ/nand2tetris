@@ -1,0 +1,11 @@
+class Main{
+    function void main() {
+        //var SnakeGame game;
+        //let game = SnakeGame.new();
+        //do game.run();
+        //do game.dispose();
+        do Output.moveCursor(10,27);
+	    do Output.printString("Game Over");
+        return;
+    }
+}
