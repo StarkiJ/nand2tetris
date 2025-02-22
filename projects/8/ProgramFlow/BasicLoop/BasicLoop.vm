@@ -21,3 +21,6 @@ label LOOP
 	push argument 0
 	if-goto LOOP        // if n > 0, goto LOOP
 	push local 0        // else, pushes sum to the stack's top
+//
+
+//

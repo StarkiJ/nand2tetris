@@ -34,12 +34,9 @@ public class Parser {
     // 从输入读取下一条命令，将其指定为“当前命令”。
     // 仅当hasMoreCommands()返回为真时，才能调用此程序。初始情况下，没有“当前命令”
     public void advance() {
-        String tmpLine;
-        do {
-            tmpLine = scanner.nextLine().trim();
-        } while (tmpLine.isEmpty() || tmpLine.startsWith("//"));
-        // 去掉注释并按空格划分命令，正则表达式"//.*"匹配任何以"//"开头的文本，"\s+"匹配一个及以上的空白字符
-        currentCommand = tmpLine.replaceAll("//.*", "").split("\\s+");
+        // 去掉注释并按空格划分命令，正则表达式"//.*"匹配任何以"//"开头的文本，"\s+"匹配一个及以上的空白字符，trim()去除字符串首尾的空白字符
+        currentCommand = scanner.nextLine().replaceAll("//.*", "").trim().split("\\s+");
+        System.out.println("Current command: " + Arrays.toString(currentCommand));
     }
 
     // 返回当前VM命令的类型，
@@ -55,6 +52,7 @@ public class Parser {
             case "function" -> "C_FUNCTION";
             case "call" -> "C_CALL";
             case "return" -> "C_RETURN";
+            case "" -> "";
             default -> {
                 System.err.println("Error unsupported command: " + Arrays.toString(currentCommand));
                 yield null;

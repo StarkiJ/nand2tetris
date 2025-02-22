@@ -6,7 +6,7 @@ public class VMTranslator {
     public static void main(String[] args) {
         // 如果未传入参数，使用默认文件路径
         if (args.length == 0) {
-            args = new String[]{"..\\FunctionCalls\\SimpleFunction\\SimpleFunction.vm"};
+            args = new String[]{"..\\ProgramFlow\\BasicLoop\\BasicLoop.vm"};
         }
 
         // 确保传入的参数是有效的文件路径
@@ -100,6 +100,10 @@ public class VMTranslator {
                 case "C_FUNCTION":
                     codeWriter.writeFunction(parser.arg1(), parser.arg2());
                     break;
+                case "":
+                    break;
+                default:
+                    System.err.println("Error unsupported command: " + commandType);
             }
         }
     }

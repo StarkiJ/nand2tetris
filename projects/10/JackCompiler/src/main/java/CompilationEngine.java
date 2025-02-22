@@ -1,3 +1,4 @@
+// 执行编译输出。从JackTokenizer中得到输入，然后将分析后的结果放入输出文件或输出流。
 public class CompilationEngine {
     // 构造函数：利用给定的输入和输出创建新的编译引擎，接下来必须调用compileClass()
     public CompilationEngine(String input, String output) {
