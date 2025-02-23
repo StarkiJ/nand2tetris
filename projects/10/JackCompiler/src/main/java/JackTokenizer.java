@@ -10,9 +10,6 @@ public class JackTokenizer {
     private Scanner scanner;
     private String currentLine = "";// 按空格分组的当前行
     private int currentLineIndex = 0;
-    //    private String currentStr = "";// 当前分组
-//    private int currentStrIndex = 0;
-    private String currentChar;
     private String currentToken;
     private String tokenType;
     // 定义0为正常，1为双引号，2为注释
@@ -70,10 +67,14 @@ public class JackTokenizer {
     // 该函数仅当hasMoreTokens()返回为真时才能调用。
     // 最初始状态是没有当前字元
     public void advance() {
+        if(!hasMoreTokens())
+        {
+            return;
+        }
         currentToken = "";
         tokenType = null;
         while (hasMoreTokens()) {
-            currentChar = "" + currentLine.charAt(currentLineIndex++);
+            String currentChar = "" + currentLine.charAt(currentLineIndex++);
             switch (state) {
                 case NORMAL:
                     if (symbols.contains(currentChar)) {// 如果当前字符是符号
@@ -82,7 +83,7 @@ public class JackTokenizer {
                             currentToken = currentChar;
                         } else { // 之前有字符，则将之前字符作为字元，并回退一格
                             currentLineIndex--;
-                            // tokenType();
+                            tokenType();
                         }
                         return;
                     } else if (currentChar.equals("\"")) {// 如果当前字符是双引号，则读取字符串
@@ -92,6 +93,7 @@ public class JackTokenizer {
                         if (currentToken.isEmpty()) {
                             advance();
                         }
+                        tokenType();
                         return;
                     } else {
                         currentToken += currentChar;

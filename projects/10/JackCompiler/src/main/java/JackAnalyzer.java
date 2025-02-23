@@ -9,7 +9,7 @@ public class JackAnalyzer {
     public static void main(String[] args) {
         // 如果未传入参数，使用默认文件路径
         if (args.length == 0) {
-            args = new String[]{"..\\Square"};
+            args = new String[]{"..\\Square\\Main.jack"};
         }
 
         // 确保传入的参数是有效的文件路径
@@ -23,16 +23,43 @@ public class JackAnalyzer {
         if (filePath.endsWith(".jack"))// 检查文件路径是否以.vm结尾
         {
             System.out.println("File Compile: Jack file - " + filePath);
-            CompileFile(filePath);
+            // tokenizeFile(filePath);
+            compileFile(filePath);
         } else if (!filePath.matches(".")) {
             System.out.println("Directory Compile: Jack directory - " + filePath);
-            CompileDirectory(filePath);
+            // tokenizeDirectory(filePath);
+            compileDirectory(filePath);
         } else {
             System.err.println("Invalid file path: " + filePath);
         }
     }
 
-    private static void CompileDirectory(String filePath) {
+    private static void compileDirectory(String filePath) {
+    }
+
+    private static void compileFile(String filePath) {
+        int index = filePath.lastIndexOf("\\");
+        String fileName = filePath.substring(0, index) + "\\output\\"
+                + filePath.substring(index + 1, filePath.lastIndexOf("."));
+        PrintWriter writer;
+        try {
+            writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName + ".xml")));
+        } catch (Exception e) {
+            System.err.println("Error creating output file: " + e.getMessage());
+            return;
+        }
+        JackTokenizer tokenizer = new JackTokenizer(filePath);
+        CompilationEngine engine = new CompilationEngine(tokenizer, writer);
+        engine.compileClass();
+        try {
+            writer.close();
+        } catch (Exception e) {
+            System.err.println("Error closing output file: " + e.getMessage());
+        }
+        System.out.println("File Compile Success: " + filePath);
+    }
+
+    private static void tokenizeDirectory(String filePath) {
         // 创建一个File对象，表示文件夹
         File folder = new File(filePath);
 
@@ -43,7 +70,7 @@ public class JackAnalyzer {
             if (files != null && files.length > 0) {
                 // 遍历文件夹中的每个VM文件
                 for (File file : files) {
-                    CompileFile(filePath + "\\" + file.getName());
+                    tokenizeFile(filePath + "\\" + file.getName());
                 }
             } else {
                 System.err.println("Error VM file no found: " + filePath);
@@ -53,47 +80,48 @@ public class JackAnalyzer {
         }
     }
 
-    private static void CompileFile(String filePath) {
+    private static void tokenizeFile(String filePath) {
         int index = filePath.lastIndexOf("\\");
-        String fileName = filePath.substring(index + 1, filePath.lastIndexOf("."));
-        PrintWriter writer;
+        String fileName = filePath.substring(0, index) + "\\output\\"
+                + filePath.substring(index + 1, filePath.lastIndexOf("."));
+        PrintWriter writerT;
         try {
-            writer = new PrintWriter(new BufferedWriter(new FileWriter(filePath.substring(0, index) + "\\output\\" + fileName + "T.xml")));
+            writerT = new PrintWriter(new BufferedWriter(new FileWriter(fileName + "T.xml")));
         } catch (Exception e) {
             System.err.println("Error creating output file: " + e.getMessage());
             return;
         }
         JackTokenizer tokenizer = new JackTokenizer(filePath);
-        writer.println("<tokens>");
+        writerT.println("<tokens>");
         while (tokenizer.hasMoreTokens()) {
             tokenizer.advance();
             switch (tokenizer.tokenType()) {
                 case "KEYWORD":
-                    writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
+                    writerT.println("<keyword> " + tokenizer.keyword() + " </keyword>");
                     break;
                 case "SYMBOL":
-                    writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
+                    writerT.println("<symbol> " + tokenizer.symbol() + " </symbol>");
                     break;
                 case "IDENTIFIER":
-                    writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
+                    writerT.println("<identifier> " + tokenizer.identifier() + " </identifier>");
                     break;
                 case "INT_CONST":
-                    writer.println("<integerConstant> " + tokenizer.intVal() + " </integerConstant>");
+                    writerT.println("<integerConstant> " + tokenizer.intVal() + " </integerConstant>");
                     break;
                 case "STRING_CONST":
-                    writer.println("<stringConstant> " + tokenizer.stringVal() + " </stringConstant>");
+                    writerT.println("<stringConstant> " + tokenizer.stringVal() + " </stringConstant>");
                     break;
                 default:
                     System.err.println("Invalid token type: " + tokenizer.tokenType());
                     break;
             }
         }
-        writer.println("</tokens>");
+        writerT.println("</tokens>");
         try {
-            writer.close();
+            writerT.close();
         } catch (Exception e) {
             System.err.println("Error closing output file: " + e.getMessage());
         }
-        System.out.println("File Compile Success: " + filePath);
+        System.out.println("File tokenize Success: " + filePath);
     }
 }
