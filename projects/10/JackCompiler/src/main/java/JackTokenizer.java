@@ -1,4 +1,4 @@
-import java.util.HashMap;
+import java.util.ArrayDeque;
 import java.util.Map;
 import java.util.Scanner;
 import java.io.*;
@@ -11,11 +11,13 @@ public class JackTokenizer {
     private String currentLine = "";// 按空格分组的当前行
     private int currentLineIndex = 0;
     private String currentToken;
-    private String tokenType;
+    // private String currentTokenType;
+    private ArrayDeque<String> tokenQueue = new ArrayDeque<>();
+
     // 定义0为正常，1为双引号，2为注释
     private static final int NORMAL = 0;  // 正常状态
     private static final int IN_QUOTE = 1;  // 双引号内
-    private static final int IN_COMMENT = 2;  // 注释内
+    // private static final int IN_COMMENT = 2;  // 注释内
     private int state = NORMAL;
 
     private static final Set<String> keywords = Set.of(
@@ -26,21 +28,22 @@ public class JackTokenizer {
             "{", "}", "(", ")", "[", "]", ".", ",", ";",
             "+", "-", "*", "/", "&", "|", "<", ">", "=", "~");
     private static final Map<String, String> replaceSymbols = Map.of(
-                    "<", "&lt;",
-                    ">", "&gt;",
-                    "&", "&amp;");
+            "<", "&lt;",
+            ">", "&gt;",
+            "&", "&amp;");
 
     // 构造函数：打开输入文件/输入流，准备进行字符转换操作
     public JackTokenizer(String input) {
         try {
             scanner = new Scanner(new File(input));
+            tokenizeFile(input);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     // 输入中是否还有字元？
-    public boolean hasMoreTokens() {
+    private boolean hasMoreTokens() {
         /*if (currentStrIndex < currentStr.length()) {//当前组还有字符
             return true;
         } else if (currentLineIndex < currentLine.length) {//当前行还有字符
@@ -63,48 +66,62 @@ public class JackTokenizer {
         }
     }
 
+    // 提前查看下一个字元
+    public String peekNextToken() {
+        return tokenQueue.peek();
+    }
+
     // 从输入中获取下一个字符，使其成为当前字元。
     // 该函数仅当hasMoreTokens()返回为真时才能调用。
     // 最初始状态是没有当前字元
     public void advance() {
-        if(!hasMoreTokens())
-        {
-            return;
+        if (!tokenQueue.isEmpty()) {
+            currentToken = tokenQueue.poll();
         }
+    }
+//    public void advance() {
+//        if (tokenQueue.isEmpty() && hasMoreTokens()) {
+//            advancePre();
+//            tokenQueue.offer(currentToken);
+//        }
+//        currentToken = tokenQueue.poll();
+//    }
+
+    // 预处理
+    private void advancePre() {
         currentToken = "";
-        tokenType = null;
+        //currentTokenType = null;
         while (hasMoreTokens()) {
             String currentChar = "" + currentLine.charAt(currentLineIndex++);
             switch (state) {
                 case NORMAL:
                     if (symbols.contains(currentChar)) {// 如果当前字符是符号
                         if (currentToken.isEmpty()) { // 之前没有字符，则将符号作为字元
-                            tokenType = "SYMBOL";
+                            //currentTokenType = "SYMBOL";
                             currentToken = currentChar;
                         } else { // 之前有字符，则将之前字符作为字元，并回退一格
                             currentLineIndex--;
-                            tokenType();
                         }
                         return;
                     } else if (currentChar.equals("\"")) {// 如果当前字符是双引号，则读取字符串
                         state = IN_QUOTE;
-                        tokenType = "STRING_CONST";
+                        currentToken = "\"";
+                        //currentTokenType = "STRING_CONST";
                     } else if (currentChar.equals(" ")) {
                         if (currentToken.isEmpty()) {
-                            advance();
+                            advancePre();
                         }
-                        tokenType();
                         return;
                     } else {
                         currentToken += currentChar;
                     }
                     break;
                 case IN_QUOTE:
+                    currentToken += currentChar;
                     if (currentChar.equals("\"")) {
                         state = NORMAL;
                         return;
                     }
-                    currentToken += currentChar;
                     break;
                 default:
                     System.err.println("Invalid state: " + state);
@@ -115,21 +132,34 @@ public class JackTokenizer {
 
     // 返回当前字元的类型
     public String tokenType() {
-        if (tokenType == null) {
-            if (keywords.contains(currentToken)) {
-                tokenType = "KEYWORD";
-            } else if (symbols.contains(currentToken)) {
-                tokenType = "SYMBOL";
-            } else if (currentToken.startsWith("\"")) {
-                tokenType = "STRING_CONST";
-            } else if (currentToken.matches("[0-9]+")) {
-                tokenType = "INT_CONST";
-            } else {
-                tokenType = "IDENTIFIER";
-            }
+        if (keywords.contains(currentToken)) {
+            return "KEYWORD";
+        } else if (symbols.contains(currentToken)) {
+            return "SYMBOL";
+        } else if (currentToken.startsWith("\"")) {
+            return "STRING_CONST";
+        } else if (currentToken.matches("[0-9]+")) {
+            return "INT_CONST";
+        } else {
+            return "IDENTIFIER";
         }
-        return tokenType;
     }
+//    public String tokenType() {
+//        if (currentTokenType == null) {
+//            if (keywords.contains(currentToken)) {
+//                currentTokenType = "KEYWORD";
+//            } else if (symbols.contains(currentToken)) {
+//                currentTokenType = "SYMBOL";
+//            } else if (currentToken.startsWith("\"")) {
+//                currentTokenType = "STRING_CONST";
+//            } else if (currentToken.matches("[0-9]+")) {
+//                currentTokenType = "INT_CONST";
+//            } else {
+//                currentTokenType = "IDENTIFIER";
+//            }
+//        }
+//        return currentTokenType;
+//    }
 
     // 返回当前字元的关键字。
     // 仅当tokenType()的返回值为KEYWORD时才能被调用
@@ -159,6 +189,57 @@ public class JackTokenizer {
     // 返回当前字元的字符串值。
     // 仅当tokenType()的返回值为STRING_CONST时才能被调用
     public String stringVal() {
+        return currentToken.substring(1, currentToken.length() - 2);
+    }
+
+    // 返回当前字元
+    public String getCurrentToken() {
         return currentToken;
+    }
+
+    // 从文件读取字符，并生成token
+    private void tokenizeFile(String filePath) {
+        int index = filePath.lastIndexOf("\\");
+        String fileName = filePath.substring(0, index) + "\\output\\"
+                + filePath.substring(index + 1, filePath.lastIndexOf("."));
+        PrintWriter writerT;
+        try {
+            writerT = new PrintWriter(new BufferedWriter(new FileWriter(fileName + "T.xml")));
+        } catch (Exception e) {
+            System.err.println("Error creating output file: " + e.getMessage());
+            return;
+        }
+        writerT.println("<tokens>");
+        while (hasMoreTokens()) {
+            advancePre();
+            tokenQueue.offer(currentToken);
+            switch (tokenType()) {
+                case "KEYWORD":
+                    writerT.println("<keyword> " + keyword() + " </keyword>");
+                    break;
+                case "SYMBOL":
+                    writerT.println("<symbol> " + symbol() + " </symbol>");
+                    break;
+                case "IDENTIFIER":
+                    writerT.println("<identifier> " + identifier() + " </identifier>");
+                    break;
+                case "INT_CONST":
+                    writerT.println("<integerConstant> " + intVal() + " </integerConstant>");
+                    break;
+                case "STRING_CONST":
+                    writerT.println("<stringConstant> " + stringVal() + " </stringConstant>");
+                    break;
+                default:
+                    System.err.println("Invalid token type: " + tokenType());
+                    break;
+            }
+        }
+        writerT.println("</tokens>");
+        try {
+            writerT.close();
+        } catch (Exception e) {
+            System.err.println("Error closing output file: " + e.getMessage());
+        }
+        System.out.println("File tokenize Success: " + filePath);
     }
 }
