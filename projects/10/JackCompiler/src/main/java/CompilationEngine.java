@@ -34,14 +34,12 @@ public class CompilationEngine {
         writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
         tokenizer.advance();
         // classVarDec*
-        while (tokenizer.tokenType().equals("KEYWORD")
-                && (tokenizer.keyword().equals("static") || tokenizer.keyword().equals("field"))) {
+        while (tokenizer.getToken().equals("static") || tokenizer.getToken().equals("field")) {
             compileClassVarDec();
         }
         // subroutineDec*
-        while (tokenizer.tokenType().equals("KEYWORD")
-                && (tokenizer.keyword().equals("constructor") || tokenizer.keyword().equals("function")
-                || tokenizer.keyword().equals("method"))) {
+        while (tokenizer.getToken().equals("constructor") || tokenizer.getToken().equals("function")
+                || tokenizer.getToken().equals("method")) {
             compileSubroutine();
         }
         // '}'
@@ -63,7 +61,7 @@ public class CompilationEngine {
         writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
         tokenizer.advance();
         // (',' varName)*
-        while (tokenizer.symbol().equals(",")) {
+        while (tokenizer.getToken().equals(",")) {
             writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
             tokenizer.advance();
             writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
@@ -105,7 +103,6 @@ public class CompilationEngine {
         tokenizer.advance();
         // parameterList
         compileParameterList();
-        tokenizer.advance();
         // ')'
         writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
         tokenizer.advance();
@@ -116,7 +113,7 @@ public class CompilationEngine {
         writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
         tokenizer.advance();
         // varDec*
-        while (tokenizer.keyword().equals("var")) {
+        while (tokenizer.getToken().equals("var")) {
             compileVarDec();
         }
         // statements
@@ -140,7 +137,7 @@ public class CompilationEngine {
             writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
             tokenizer.advance();
             // (',' type varName)*
-            while (tokenizer.symbol().equals(",")) {
+            while (tokenizer.getToken().equals(",")) {
                 writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
                 tokenizer.advance();
                 compileType();
@@ -164,8 +161,8 @@ public class CompilationEngine {
         writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
         tokenizer.advance();
         // (',' varName)*
-        while (tokenizer.symbol().equals(",")) {
-            writer.println("<symbol> " + tokenizer.symbol() + "</symbol>");
+        while (tokenizer.getToken().equals(",")) {
+            writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
             tokenizer.advance();
             writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
             tokenizer.advance();
@@ -181,11 +178,9 @@ public class CompilationEngine {
     // statement: letStatement|ifStatement|whileStatement|doStatement|returnStatement
     public void compileStatements() {
         writer.println("<statements>");
-        while (tokenizer.tokenType().equals("KEYWORD")
-                && (tokenizer.keyword().equals("let") || tokenizer.keyword().equals("if")
-                || tokenizer.keyword().equals("while") || tokenizer.keyword().equals("do")
-                || tokenizer.keyword().equals("return"))) {
-            switch (tokenizer.keyword()) {
+        while (tokenizer.getToken().equals("let") || tokenizer.getToken().equals("if") || tokenizer.getToken().equals("while")
+                || tokenizer.getToken().equals("do") || tokenizer.getToken().equals("return")) {
+            switch (tokenizer.getToken()) {
                 case "let":
                     compileLet();
                     break;
@@ -202,7 +197,6 @@ public class CompilationEngine {
                     compileReturn();
                     break;
             }
-            tokenizer.advance();
         }
         writer.println("</statements>");
     }
@@ -214,8 +208,8 @@ public class CompilationEngine {
         // 'do'
         writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
         tokenizer.advance();
-
-
+        // subroutineCall
+        compileSubroutineCall();
         // ';'
         writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
         tokenizer.advance();
@@ -228,7 +222,7 @@ public class CompilationEngine {
         // subroutineName | (className | varName)
         writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
         tokenizer.advance();
-        if (tokenizer.symbol().equals(".")) {
+        if (tokenizer.getToken().equals(".")) {
             // '.'
             writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
             tokenizer.advance();
@@ -256,7 +250,7 @@ public class CompilationEngine {
         // varName
         writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
         tokenizer.advance();
-        if (tokenizer.symbol().equals("[")) {
+        if (tokenizer.getToken().equals("[")) {
             // '['
             writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
             tokenizer.advance();
@@ -310,7 +304,7 @@ public class CompilationEngine {
         // 'return'
         writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
         tokenizer.advance();
-        if (!tokenizer.symbol().equals(";")) {
+        if (!tokenizer.getToken().equals(";")) {
             // expression
             compileExpression();
         }
@@ -343,7 +337,7 @@ public class CompilationEngine {
         // '}'
         writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
         tokenizer.advance();
-        if (tokenizer.keyword().equals("else")) {
+        if (tokenizer.getToken().equals("else")) {
             // 'else'
             writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
             tokenizer.advance();
@@ -365,7 +359,7 @@ public class CompilationEngine {
         writer.println("<expression>");
         // term
         compileTerm();
-        while (tokenizer.tokenType().equals("SYMBOL") && op.contains(tokenizer.symbol())) {
+        while (op.contains(tokenizer.getToken())) {
             // op: '+' | '-' | '*' | '/' | '&' | '|' | '<' | '>' | '='
             writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
             tokenizer.advance();
@@ -428,7 +422,7 @@ public class CompilationEngine {
                 break;
             // '(' expression ')' | (unaryOp term)
             case "SYMBOL":
-                if (tokenizer.symbol().equals("(")) {
+                if (tokenizer.getToken().equals("(")) {
                     // '('
                     writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
                     tokenizer.advance();
@@ -437,13 +431,14 @@ public class CompilationEngine {
                     // ')'
                     writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
                     tokenizer.advance();
-                } else if (unaryOp.contains(tokenizer.symbol())) {
+                } else if (unaryOp.contains(tokenizer.getToken())) {
                     // unaryOp: '-' | '~'
                     writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
                     tokenizer.advance();
                     // term
                     compileTerm();
                 }
+                break;
             default:
                 System.err.println("Invalid term type: " + tokenizer.tokenType());
                 break;
@@ -455,10 +450,10 @@ public class CompilationEngine {
     // expressionList: (expression (',' expression)* )?
     public void compileExpressionList() {
         writer.println("<expressionList>");
-        if (!tokenizer.tokenType().equals("symbol") || !tokenizer.symbol().equals(")")) {
+        if (!tokenizer.getToken().equals(")")) {
             // expression
             compileExpression();
-            while (tokenizer.symbol().equals(",")) {
+            while (tokenizer.getToken().equals(",")) {
                 // ','
                 writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
                 tokenizer.advance();

@@ -9,7 +9,7 @@ import java.util.Set;
 public class JackTokenizer {
     private Scanner scanner;
     private String currentLine = "";// 按空格分组的当前行
-    private int currentLineIndex = 0;
+    private int lineIndex = 0;
     private String currentToken;
     // private String currentTokenType;
     private ArrayDeque<String> tokenQueue = new ArrayDeque<>();
@@ -17,7 +17,7 @@ public class JackTokenizer {
     // 定义0为正常，1为双引号，2为注释
     private static final int NORMAL = 0;  // 正常状态
     private static final int IN_QUOTE = 1;  // 双引号内
-    // private static final int IN_COMMENT = 2;  // 注释内
+    private static final int IN_COMMENT = 2;  // 注释内
     private int state = NORMAL;
 
     private static final Set<String> keywords = Set.of(
@@ -44,24 +44,17 @@ public class JackTokenizer {
 
     // 输入中是否还有字元？
     private boolean hasMoreTokens() {
-        /*if (currentStrIndex < currentStr.length()) {//当前组还有字符
-            return true;
-        } else if (currentLineIndex < currentLine.length) {//当前行还有字符
-            currentStr = currentLine[currentLineIndex++];
-            currentStrIndex = 0;
-            return hasMoreTokens();
-        }*/
-        if (currentLineIndex < currentLine.length()) {
+        if (lineIndex < currentLine.length()) {
             return true;
         } else if (scanner.hasNextLine()) {//当前文件还有字符
             currentLine = scanner.nextLine()
-                    .replaceAll("//.*|/\\*.*|\\*.*|/\\*/.*", "")
-                    //.replaceAll("//.*", "")
+                    //.replaceAll("//.*|/\\*.*|\\*.*|/\\*/.*", "")
+                    .replaceAll("//.*", "")
                     .trim()/*.split("\\s+")*/;
-            currentLineIndex = 0;
+            lineIndex = 0;
             return hasMoreTokens();
         } else {
-            scanner.close();
+            // scanner.close();
             return false;
         }
     }
@@ -92,15 +85,17 @@ public class JackTokenizer {
         currentToken = "";
         //currentTokenType = null;
         while (hasMoreTokens()) {
-            String currentChar = "" + currentLine.charAt(currentLineIndex++);
+            String currentChar = "" + currentLine.charAt(lineIndex++);
             switch (state) {
                 case NORMAL:
-                    if (symbols.contains(currentChar)) {// 如果当前字符是符号
+                    if (currentChar.equals("/") && hasMoreTokens() && currentLine.charAt(lineIndex) == '*') {
+                        state = IN_COMMENT;
+                    } else if (symbols.contains(currentChar)) {// 如果当前字符是符号
                         if (currentToken.isEmpty()) { // 之前没有字符，则将符号作为字元
                             //currentTokenType = "SYMBOL";
                             currentToken = currentChar;
                         } else { // 之前有字符，则将之前字符作为字元，并回退一格
-                            currentLineIndex--;
+                            lineIndex--;
                         }
                         return;
                     } else if (currentChar.equals("\"")) {// 如果当前字符是双引号，则读取字符串
@@ -121,6 +116,12 @@ public class JackTokenizer {
                     if (currentChar.equals("\"")) {
                         state = NORMAL;
                         return;
+                    }
+                    break;
+                case IN_COMMENT:
+                    if (currentChar.equals("*") && hasMoreTokens() && currentLine.charAt(lineIndex) == '/') {
+                        state = NORMAL;
+                        lineIndex++;
                     }
                     break;
                 default:
@@ -189,11 +190,11 @@ public class JackTokenizer {
     // 返回当前字元的字符串值。
     // 仅当tokenType()的返回值为STRING_CONST时才能被调用
     public String stringVal() {
-        return currentToken.substring(1, currentToken.length() - 2);
+        return currentToken.substring(1, currentToken.length() - 1);
     }
 
     // 返回当前字元
-    public String getCurrentToken() {
+    public String getToken() {
         return currentToken;
     }
 

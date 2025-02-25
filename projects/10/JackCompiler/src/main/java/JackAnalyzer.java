@@ -9,7 +9,7 @@ public class JackAnalyzer {
     public static void main(String[] args) {
         // 如果未传入参数，使用默认文件路径
         if (args.length == 0) {
-            args = new String[]{"..\\Square"};
+            args = new String[]{"..\\ArrayTest"};
         }
 
         // 确保传入的参数是有效的文件路径
@@ -76,25 +76,4 @@ public class JackAnalyzer {
         }
         System.out.println("File Compile Success: " + filePath);
     }
-
-//    private static void tokenizeDirectory(String filePath) {
-//        // 创建一个File对象，表示文件夹
-//        File folder = new File(filePath);
-//
-//        // 检查文件夹是否存在并且是目录
-//        if (folder.exists() && folder.isDirectory()) {
-//            File[] files = folder.listFiles((dir, name) -> name.endsWith(".jack"));
-//            // 如果有符合条件的文件
-//            if (files != null && files.length > 0) {
-//                // 遍历文件夹中的每个Jack文件
-//                for (File file : files) {
-//                    tokenizeFile(filePath + "\\" + file.getName());
-//                }
-//            } else {
-//                System.err.println("Error Jack file no found: " + filePath);
-//            }
-//        } else {
-//            System.err.println("Error directory no found: " + filePath);
-//        }
-//    }
 }
