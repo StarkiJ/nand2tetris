@@ -114,6 +114,8 @@ public class CompilationEngine {
         writer.println("<subroutineDec>");
         // 'constructor'|'function'|'method'
         kind = tokenizer.keyword();
+        boolean isConstructor = kind.equals("constructor");
+        boolean isMethod = kind.equals("method");
         writer.println("<keyword> " + kind + " </keyword>");
         tokenizer.advance();
         // void|type
@@ -126,6 +128,9 @@ public class CompilationEngine {
         writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
         tokenizer.advance();
         // parameterList
+        if (isMethod) {
+            symbolTable.define("this", className, "arg");
+        }
         compileParameterList();
         // ')'
         writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
@@ -141,6 +146,15 @@ public class CompilationEngine {
             compileVarDec();
         }
         vmWriter.writeFunction(className + "." + subName, symbolTable.varCount("var"));
+        if (isConstructor) {
+            vmWriter.writePush("constant", symbolTable.varCount("field"));
+            vmWriter.writeCall("Memory.alloc", 1);
+            vmWriter.writePop("pointer", 0);
+        }
+        if (isMethod) {
+            vmWriter.writePush("argument", 0);
+            vmWriter.writePop("pointer", 0);
+        }
         // statements
         compileStatements();
         // '}'
@@ -155,9 +169,6 @@ public class CompilationEngine {
     // parameterList: (type varName (',' type varName)*)?
     public void compileParameterList() {
         writer.println("<parameterList>");
-        if (kind.equals("method")) {
-            symbolTable.define("this", className, "arg");
-        }
         if (tokenizer.tokenType().equals("KEYWORD") || tokenizer.tokenType().equals("IDENTIFIER")) {
             // type
             compileType();
@@ -266,19 +277,24 @@ public class CompilationEngine {
             writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
             tokenizer.advance();
             // subroutineName
-            name = tokenizer.identifier();
+            name = subName;
+            subName = tokenizer.identifier();
             type = symbolTable.typeOf(name);
             kind = symbolTable.kindOf(name);
             index = symbolTable.indexOf(name);
             // 判断是方法调用还是函数调用
-            if (index >= 0) {
-                subName = type;
+            if (index >= 0) {// 方法调用
+                name = type;
                 vmWriter.writePush(kind, index);
                 nArgs++;
             }
-            subName += "." + name;
+            subName = name + "." + subName;
             writer.println("<identifier> " + name + " </identifier>");
             tokenizer.advance();
+        } else {
+            subName = className + "." + subName;
+            vmWriter.writePush("pointer", 0);
+            nArgs++;
         }
         // '('
         writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
@@ -415,12 +431,12 @@ public class CompilationEngine {
         // statements
         compileStatements();
         // '}'
-        vmWriter.writeGoto("IF_END_" + tmpIndex);
         writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
         tokenizer.advance();
-        vmWriter.writeLabel("IF_ELSE_" + tmpIndex);
         if (tokenizer.getToken().equals("else")) {
             // 'else'
+            vmWriter.writeGoto("IF_END_" + tmpIndex);
+            vmWriter.writeLabel("IF_ELSE_" + tmpIndex);
             writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
             tokenizer.advance();
             // '{'
@@ -431,8 +447,10 @@ public class CompilationEngine {
             // '}'
             writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
             tokenizer.advance();
+            vmWriter.writeLabel("IF_END_" + tmpIndex);
+        } else {
+            vmWriter.writeLabel("IF_ELSE_" + tmpIndex);
         }
-        vmWriter.writeLabel("IF_END_" + tmpIndex);
         writer.println("</ifStatement>");
     }
 
