@@ -138,7 +138,7 @@
 <keyword> do </keyword>
 <identifier> Memory </identifier>
 <symbol> . </symbol>
-<identifier> deAlloc </identifier>
+<identifier> Memory </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -173,7 +173,7 @@
 <keyword> do </keyword>
 <identifier> Screen </identifier>
 <symbol> . </symbol>
-<identifier> setColor </identifier>
+<identifier> Screen </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -217,7 +217,7 @@
 <keyword> do </keyword>
 <identifier> Screen </identifier>
 <symbol> . </symbol>
-<identifier> setColor </identifier>
+<identifier> Screen </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -261,7 +261,7 @@
 <keyword> do </keyword>
 <identifier> Screen </identifier>
 <symbol> . </symbol>
-<identifier> drawRectangle </identifier>
+<identifier> Screen </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -515,7 +515,7 @@
 <keyword> do </keyword>
 <identifier> Screen </identifier>
 <symbol> . </symbol>
-<identifier> setColor </identifier>
+<identifier> Screen </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -531,7 +531,7 @@
 <keyword> do </keyword>
 <identifier> Screen </identifier>
 <symbol> . </symbol>
-<identifier> drawRectangle </identifier>
+<identifier> Screen </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -597,7 +597,7 @@
 <keyword> do </keyword>
 <identifier> Screen </identifier>
 <symbol> . </symbol>
-<identifier> setColor </identifier>
+<identifier> Screen </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -613,7 +613,7 @@
 <keyword> do </keyword>
 <identifier> Screen </identifier>
 <symbol> . </symbol>
-<identifier> drawRectangle </identifier>
+<identifier> Screen </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -718,7 +718,7 @@
 <keyword> do </keyword>
 <identifier> Screen </identifier>
 <symbol> . </symbol>
-<identifier> setColor </identifier>
+<identifier> Screen </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -734,7 +734,7 @@
 <keyword> do </keyword>
 <identifier> Screen </identifier>
 <symbol> . </symbol>
-<identifier> drawRectangle </identifier>
+<identifier> Screen </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -780,7 +780,7 @@
 <keyword> do </keyword>
 <identifier> Screen </identifier>
 <symbol> . </symbol>
-<identifier> setColor </identifier>
+<identifier> Screen </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -796,7 +796,7 @@
 <keyword> do </keyword>
 <identifier> Screen </identifier>
 <symbol> . </symbol>
-<identifier> drawRectangle </identifier>
+<identifier> Screen </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>

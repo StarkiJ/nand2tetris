@@ -344,7 +344,7 @@ public class CompilationEngine {
             // 将expression的值赋给数组
             vmWriter.writePop("temp", 0);
             vmWriter.writePop("pointer", 1);
-            vmWriter.writePush("that", 0);
+            vmWriter.writePush("temp", 0);
             vmWriter.writePop("that", 0);
         } else {
             // 将expression的值赋给变量
@@ -521,7 +521,7 @@ public class CompilationEngine {
                 String str = tokenizer.stringVal();
                 int len = str.length();
                 vmWriter.writePush("constant", len);
-                vmWriter.writePush("String.new", 1);
+                vmWriter.writeCall("String.new", 1);
                 for (int i = 0; i < len; i++) {
                     int ascii = str.charAt(i);
                     vmWriter.writePush("constant", ascii);

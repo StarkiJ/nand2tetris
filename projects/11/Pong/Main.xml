@@ -23,7 +23,7 @@
 <keyword> do </keyword>
 <identifier> PongGame </identifier>
 <symbol> . </symbol>
-<identifier> newInstance </identifier>
+<identifier> PongGame </identifier>
 <symbol> ( </symbol>
 <expressionList>
 </expressionList>
@@ -38,7 +38,7 @@
 <term>
 <identifier> PongGame </identifier>
 <symbol> . </symbol>
-<identifier> getInstance </identifier>
+<identifier> PongGame </identifier>
 <symbol> ( </symbol>
 <expressionList>
 </expressionList>
@@ -51,7 +51,7 @@
 <keyword> do </keyword>
 <identifier> game </identifier>
 <symbol> . </symbol>
-<identifier> run </identifier>
+<identifier> PongGame </identifier>
 <symbol> ( </symbol>
 <expressionList>
 </expressionList>
@@ -62,7 +62,7 @@
 <keyword> do </keyword>
 <identifier> game </identifier>
 <symbol> . </symbol>
-<identifier> dispose </identifier>
+<identifier> PongGame </identifier>
 <symbol> ( </symbol>
 <expressionList>
 </expressionList>

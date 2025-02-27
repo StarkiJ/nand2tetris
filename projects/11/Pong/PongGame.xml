@@ -65,7 +65,7 @@
 <keyword> do </keyword>
 <identifier> Screen </identifier>
 <symbol> . </symbol>
-<identifier> clearScreen </identifier>
+<identifier> Screen </identifier>
 <symbol> ( </symbol>
 <expressionList>
 </expressionList>
@@ -91,7 +91,7 @@
 <term>
 <identifier> Bat </identifier>
 <symbol> . </symbol>
-<identifier> new </identifier>
+<identifier> Bat </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -131,7 +131,7 @@
 <term>
 <identifier> Ball </identifier>
 <symbol> . </symbol>
-<identifier> new </identifier>
+<identifier> Ball </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -179,7 +179,7 @@
 <keyword> do </keyword>
 <identifier> ball </identifier>
 <symbol> . </symbol>
-<identifier> setDestination </identifier>
+<identifier> Ball </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -201,7 +201,7 @@
 <keyword> do </keyword>
 <identifier> Screen </identifier>
 <symbol> . </symbol>
-<identifier> drawRectangle </identifier>
+<identifier> Screen </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -235,7 +235,7 @@
 <keyword> do </keyword>
 <identifier> Output </identifier>
 <symbol> . </symbol>
-<identifier> moveCursor </identifier>
+<identifier> Output </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -257,7 +257,7 @@
 <keyword> do </keyword>
 <identifier> Output </identifier>
 <symbol> . </symbol>
-<identifier> printString </identifier>
+<identifier> Output </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -341,7 +341,7 @@
 <keyword> do </keyword>
 <identifier> bat </identifier>
 <symbol> . </symbol>
-<identifier> dispose </identifier>
+<identifier> Bat </identifier>
 <symbol> ( </symbol>
 <expressionList>
 </expressionList>
@@ -352,7 +352,7 @@
 <keyword> do </keyword>
 <identifier> ball </identifier>
 <symbol> . </symbol>
-<identifier> dispose </identifier>
+<identifier> Ball </identifier>
 <symbol> ( </symbol>
 <expressionList>
 </expressionList>
@@ -363,7 +363,7 @@
 <keyword> do </keyword>
 <identifier> Memory </identifier>
 <symbol> . </symbol>
-<identifier> deAlloc </identifier>
+<identifier> Memory </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -402,7 +402,7 @@
 <term>
 <identifier> PongGame </identifier>
 <symbol> . </symbol>
-<identifier> new </identifier>
+<identifier> PongGame </identifier>
 <symbol> ( </symbol>
 <expressionList>
 </expressionList>
@@ -516,7 +516,7 @@
 <term>
 <identifier> Keyboard </identifier>
 <symbol> . </symbol>
-<identifier> keyPressed </identifier>
+<identifier> Keyboard </identifier>
 <symbol> ( </symbol>
 <expressionList>
 </expressionList>
@@ -529,7 +529,7 @@
 <keyword> do </keyword>
 <identifier> bat </identifier>
 <symbol> . </symbol>
-<identifier> move </identifier>
+<identifier> Bat </identifier>
 <symbol> ( </symbol>
 <expressionList>
 </expressionList>
@@ -549,7 +549,7 @@
 <keyword> do </keyword>
 <identifier> Sys </identifier>
 <symbol> . </symbol>
-<identifier> wait </identifier>
+<identifier> Sys </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -583,7 +583,7 @@
 <keyword> do </keyword>
 <identifier> bat </identifier>
 <symbol> . </symbol>
-<identifier> setDirection </identifier>
+<identifier> Bat </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -619,7 +619,7 @@
 <keyword> do </keyword>
 <identifier> bat </identifier>
 <symbol> . </symbol>
-<identifier> setDirection </identifier>
+<identifier> Bat </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -722,7 +722,7 @@
 <term>
 <identifier> Keyboard </identifier>
 <symbol> . </symbol>
-<identifier> keyPressed </identifier>
+<identifier> Keyboard </identifier>
 <symbol> ( </symbol>
 <expressionList>
 </expressionList>
@@ -735,7 +735,7 @@
 <keyword> do </keyword>
 <identifier> bat </identifier>
 <symbol> . </symbol>
-<identifier> move </identifier>
+<identifier> Bat </identifier>
 <symbol> ( </symbol>
 <expressionList>
 </expressionList>
@@ -755,7 +755,7 @@
 <keyword> do </keyword>
 <identifier> Sys </identifier>
 <symbol> . </symbol>
-<identifier> wait </identifier>
+<identifier> Sys </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -788,7 +788,7 @@
 <keyword> do </keyword>
 <identifier> Output </identifier>
 <symbol> . </symbol>
-<identifier> moveCursor </identifier>
+<identifier> Output </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -810,7 +810,7 @@
 <keyword> do </keyword>
 <identifier> Output </identifier>
 <symbol> . </symbol>
-<identifier> printString </identifier>
+<identifier> Output </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -866,7 +866,7 @@
 <term>
 <identifier> ball </identifier>
 <symbol> . </symbol>
-<identifier> move </identifier>
+<identifier> Ball </identifier>
 <symbol> ( </symbol>
 <expressionList>
 </expressionList>
@@ -949,7 +949,7 @@
 <term>
 <identifier> bat </identifier>
 <symbol> . </symbol>
-<identifier> getLeft </identifier>
+<identifier> Bat </identifier>
 <symbol> ( </symbol>
 <expressionList>
 </expressionList>
@@ -966,7 +966,7 @@
 <term>
 <identifier> bat </identifier>
 <symbol> . </symbol>
-<identifier> getRight </identifier>
+<identifier> Bat </identifier>
 <symbol> ( </symbol>
 <expressionList>
 </expressionList>
@@ -983,7 +983,7 @@
 <term>
 <identifier> ball </identifier>
 <symbol> . </symbol>
-<identifier> getLeft </identifier>
+<identifier> Ball </identifier>
 <symbol> ( </symbol>
 <expressionList>
 </expressionList>
@@ -1000,7 +1000,7 @@
 <term>
 <identifier> ball </identifier>
 <symbol> . </symbol>
-<identifier> getRight </identifier>
+<identifier> Ball </identifier>
 <symbol> ( </symbol>
 <expressionList>
 </expressionList>
@@ -1178,7 +1178,7 @@
 <keyword> do </keyword>
 <identifier> bat </identifier>
 <symbol> . </symbol>
-<identifier> setWidth </identifier>
+<identifier> Bat </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -1209,7 +1209,7 @@
 <keyword> do </keyword>
 <identifier> Output </identifier>
 <symbol> . </symbol>
-<identifier> moveCursor </identifier>
+<identifier> Output </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -1231,7 +1231,7 @@
 <keyword> do </keyword>
 <identifier> Output </identifier>
 <symbol> . </symbol>
-<identifier> printInt </identifier>
+<identifier> Output </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
@@ -1253,7 +1253,7 @@
 <keyword> do </keyword>
 <identifier> ball </identifier>
 <symbol> . </symbol>
-<identifier> bounce </identifier>
+<identifier> Ball </identifier>
 <symbol> ( </symbol>
 <expressionList>
 <expression>
