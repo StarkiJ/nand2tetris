@@ -1,0 +1,119 @@
+push constant 6
+sub
+push constant 6
+sub
+push constant 0
+call show 0
+pop temp 0
+push pointer 0
+push pointer 0
+call Memory.deAlloc 0
+pop temp 0
+push constant 0
+not
+call Screen.setColor 0
+pop temp 0
+call draw 0
+pop temp 0
+push constant 0
+call Screen.setColor 0
+pop temp 0
+call draw 0
+pop temp 0
+push constant 5
+add
+push constant 5
+add
+call Screen.drawRectangle 0
+pop temp 0
+push constant 5
+add
+sub
+sub
+call Math.abs 0
+pop temp 0
+call Math.abs 0
+pop temp 0
+push constant 2
+call Math.multiply 2
+sub
+push constant 2
+call Math.multiply 2
+push constant 2
+sub
+call Math.multiply 2
+call hide 0
+pop temp 0
+push constant 0
+add
+add
+push constant 4
+add
+push constant 4
+add
+push constant 4
+sub
+push constant 4
+sub
+push constant 4
+add
+push constant 4
+add
+push constant 4
+sub
+push constant 4
+sub
+push constant 1
+push constant 2
+push constant 3
+push constant 4
+call show 0
+pop temp 0
+push constant 10
+call Math.divide 2
+push constant 10
+call Math.divide 2
+push constant 0
+eq
+push constant 10
+push constant 0
+push constant 1
+eq
+push constant 0
+push constant 1
+eq
+or
+push constant 20
+push constant 5
+push constant 1
+eq
+push constant 506
+push constant 50
+call Math.multiply 2
+call Math.divide 2
+call Math.multiply 2
+add
+push constant 2
+eq
+push constant 0
+push constant 50
+call Math.multiply 2
+call Math.divide 2
+call Math.multiply 2
+add
+push constant 3
+eq
+push constant 250
+push constant 25
+call Math.multiply 2
+call Math.divide 2
+call Math.multiply 2
+add
+push constant 0
+push constant 25
+call Math.multiply 2
+call Math.divide 2
+call Math.multiply 2
+add
+call setDestination 0
+pop temp 0

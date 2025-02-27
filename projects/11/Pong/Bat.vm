@@ -1,0 +1,81 @@
+push constant 2
+call show 0
+pop temp 0
+push pointer 0
+push pointer 0
+call Memory.deAlloc 0
+pop temp 0
+push constant 0
+not
+call Screen.setColor 0
+pop temp 0
+call draw 0
+pop temp 0
+push constant 0
+call Screen.setColor 0
+pop temp 0
+call draw 0
+pop temp 0
+add
+add
+call Screen.drawRectangle 0
+pop temp 0
+add
+call hide 0
+pop temp 0
+call show 0
+pop temp 0
+push constant 1
+eq
+push constant 4
+sub
+push constant 0
+push constant 0
+push constant 0
+call Screen.setColor 0
+pop temp 0
+add
+push constant 1
+add
+add
+push constant 4
+add
+add
+call Screen.drawRectangle 0
+pop temp 0
+push constant 0
+not
+call Screen.setColor 0
+pop temp 0
+push constant 3
+add
+add
+call Screen.drawRectangle 0
+pop temp 0
+push constant 4
+add
+add
+push constant 511
+push constant 511
+sub
+push constant 0
+call Screen.setColor 0
+pop temp 0
+push constant 4
+sub
+push constant 1
+sub
+add
+call Screen.drawRectangle 0
+pop temp 0
+push constant 0
+not
+call Screen.setColor 0
+pop temp 0
+add
+push constant 3
+sub
+add
+add
+call Screen.drawRectangle 0
+pop temp 0

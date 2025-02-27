@@ -2,6 +2,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 // 执行编译输出。从JackTokenizer中得到输入，然后将分析后的结果放入输出文件或输出流。
 public class CompilationEngine {
@@ -117,7 +118,8 @@ public class CompilationEngine {
         // void|type
         compileType();
         // subroutineName
-        writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
+        String subName = tokenizer.identifier();
+        writer.println("<identifier> " + subName + " </identifier>");
         tokenizer.advance();
         // '('
         writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
@@ -137,6 +139,7 @@ public class CompilationEngine {
         while (tokenizer.getToken().equals("var")) {
             compileVarDec();
         }
+        vmWriter.writeFunction(className + "." + subName, symbolTable.varCount("var"));
         // statements
         compileStatements();
         // '}'
@@ -243,6 +246,7 @@ public class CompilationEngine {
         tokenizer.advance();
         // subroutineCall
         compileSubroutineCall();
+        vmWriter.writePop("temp", 0);
         // ';'
         writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
         tokenizer.advance();
@@ -282,6 +286,7 @@ public class CompilationEngine {
         compileExpressionList();
         // ')'
         vmWriter.writeCall(subName, nArgs);
+        nArgs = 0;
         writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
         tokenizer.advance();
     }
@@ -294,19 +299,21 @@ public class CompilationEngine {
         writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
         tokenizer.advance();
         // varName
-        name = tokenizer.identifier();
-        type = symbolTable.typeOf(name);
-        kind = symbolTable.kindOf(name);
-        index = symbolTable.indexOf(name);
-        writer.println("<identifier> " + name + " </identifier>");
+        String varName = tokenizer.identifier();
+        boolean isArray = false;
+        writer.println("<identifier> " + varName + " </identifier>");
         tokenizer.advance();
         if (tokenizer.getToken().equals("[")) {
             // '['
+            isArray = true;
+            vmWriter.writePush(symbolTable.kindOf(varName), symbolTable.indexOf(varName));
             writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
             tokenizer.advance();
             // expression
             compileExpression();
             // ']'
+            // 获取数组
+            vmWriter.writeArithmetic("add");
             writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
             tokenizer.advance();
         }
@@ -316,6 +323,16 @@ public class CompilationEngine {
         // expression
         compileExpression();
         // ';'
+        if (isArray) {
+            // 将expression的值赋给数组
+            vmWriter.writePop("temp", 0);
+            vmWriter.writePop("pointer", 1);
+            vmWriter.writePush("that", 0);
+            vmWriter.writePop("that", 0);
+        } else {
+            // 将expression的值赋给变量
+            vmWriter.writePop(symbolTable.kindOf(varName), symbolTable.indexOf(varName));
+        }
         writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
         tokenizer.advance();
         writer.println("</letStatement>");
@@ -357,8 +374,11 @@ public class CompilationEngine {
         if (!tokenizer.getToken().equals(";")) {
             // expression
             compileExpression();
+        } else {
+            vmWriter.writePush("constant", 0);
         }
         // ';'
+        vmWriter.writeReturn();
         writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
         tokenizer.advance();
         writer.println("</returnStatement>");
@@ -504,7 +524,7 @@ public class CompilationEngine {
                     case "[":
                         // varName
                         vmWriter.writePush(symbolTable.kindOf(tmpName), symbolTable.indexOf(tmpName));// push varname
-                        writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
+                        writer.println("<identifier> " + tmpName + " </identifier>");
                         tokenizer.advance();
                         // '['
                         writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
@@ -524,7 +544,8 @@ public class CompilationEngine {
                         break;
                     // varName
                     default:
-                        writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
+                        vmWriter.writePush(symbolTable.kindOf(tmpName), symbolTable.indexOf(tmpName));
+                        writer.println("<identifier> " + tmpName + " </identifier>");
                         tokenizer.advance();
                         break;
                 }
@@ -542,10 +563,16 @@ public class CompilationEngine {
                     tokenizer.advance();
                 } else if (unaryOp.contains(tokenizer.getToken())) {
                     // unaryOp: '-' | '~'
-                    writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
+                    String uOp = tokenizer.symbol();
+                    writer.println("<symbol> " + uOp + " </symbol>");
                     tokenizer.advance();
                     // term
                     compileTerm();
+                    if (uOp.equals("-")) {
+                        vmWriter.writeArithmetic("neg");
+                    } else if (uOp.equals("~")) {
+                        vmWriter.writeArithmetic("not");
+                    }
                 }
                 break;
             default:
@@ -561,12 +588,14 @@ public class CompilationEngine {
         writer.println("<expressionList>");
         if (!tokenizer.getToken().equals(")")) {
             // expression
+            nArgs++;
             compileExpression();
             while (tokenizer.getToken().equals(",")) {
                 // ','
                 writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
                 tokenizer.advance();
                 // expression
+                nArgs++;
                 compileExpression();
             }
         }
