@@ -16,7 +16,7 @@ public class CompilationEngine {
     private String className;
     private String name, type, kind;
     private int index;
-    private int nArgs;
+    private int nArgs, nLabel;
 
     // 构造函数：利用给定的输入和输出创建新的编译引擎，接下来必须调用compileClass()
     public CompilationEngine(JackTokenizer input, String output) {
@@ -24,6 +24,7 @@ public class CompilationEngine {
             tokenizer = input;
             writer = new PrintWriter(new BufferedWriter(new FileWriter(output + ".xml")));
             vmWriter = new VMWriter(output + ".vm");
+            nLabel = 0;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -343,6 +344,8 @@ public class CompilationEngine {
     public void compileWhile() {
         writer.println("<whileStatement>");
         // 'while'
+        int tmpIndex = nLabel++;
+        vmWriter.writeLabel("WHILE_START_" + tmpIndex);
         writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
         tokenizer.advance();
         // '('
@@ -351,6 +354,8 @@ public class CompilationEngine {
         // expression
         compileExpression();
         // ')'
+        vmWriter.writeArithmetic("not");
+        vmWriter.writeIf("WHILE_END_" + tmpIndex);
         writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
         tokenizer.advance();
         // '{'
@@ -359,8 +364,10 @@ public class CompilationEngine {
         // statements
         compileStatements();
         // '}'
+        vmWriter.writeGoto("WHILE_START_" + tmpIndex);
         writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
         tokenizer.advance();
+        vmWriter.writeLabel("WHILE_END_" + tmpIndex);
         writer.println("</whileStatement>");
     }
 
@@ -397,6 +404,9 @@ public class CompilationEngine {
         // expression
         compileExpression();
         // ')'
+        vmWriter.writeArithmetic("not");
+        int tmpIndex = nLabel++;
+        vmWriter.writeIf("IF_ELSE_" + tmpIndex);
         writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
         tokenizer.advance();
         // '{'
@@ -405,8 +415,10 @@ public class CompilationEngine {
         // statements
         compileStatements();
         // '}'
+        vmWriter.writeGoto("IF_END_" + tmpIndex);
         writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
         tokenizer.advance();
+        vmWriter.writeLabel("IF_ELSE_" + tmpIndex);
         if (tokenizer.getToken().equals("else")) {
             // 'else'
             writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
@@ -420,6 +432,7 @@ public class CompilationEngine {
             writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
             tokenizer.advance();
         }
+        vmWriter.writeLabel("IF_END_" + tmpIndex);
         writer.println("</ifStatement>");
     }
 
@@ -430,9 +443,9 @@ public class CompilationEngine {
         // term
         compileTerm();
         while (op.contains(tokenizer.getToken())) {
-            String s = tokenizer.symbol();
+            String s = tokenizer.getToken();
             // op: '+' | '-' | '*' | '/' | '&' | '|' | '<' | '>' | '='
-            writer.println("<symbol> " + s + " </symbol>");
+            writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
             tokenizer.advance();
             // term
             compileTerm();
