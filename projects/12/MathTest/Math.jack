@@ -159,7 +159,6 @@ class Math
         return x;
     }
 
-    /** Returns the i-th bit of x. */
     function boolean bit(int x, int i)
     {
         if (~((x & powersOfTwo[i]) = 0))
