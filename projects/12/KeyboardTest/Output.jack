@@ -187,17 +187,12 @@ class Output {
         return;
     }
 
-    /** Displays the given character at the cursor location,
-     *  and advances the cursor one column forward. */
-    function void printChar(char c) {
+    function void print(char c) {
         var Array map;
         var int address, offset, i;
 
+        // 获取字符的映射表
         let map = Output.getMap(c);
-        if(map = charMaps[0]){
-            return;
-        }
-
         let address = (cursorY * 352) + (cursorX / 2);// 352=32*11, 2=64/32
         let offset = cursorX & 1;// 一行64个字符，一行32个机器字，因此X轴上一个机器字存两个字符
         let i = 0;
@@ -216,6 +211,23 @@ class Output {
                 let i = i + 1;
             }
         }
+        return;
+    }
+
+    /** Displays the given character at the cursor location,
+     *  and advances the cursor one column forward. */
+    function void printChar(char c) {
+        // 换行
+        if(c = String.newLine()){
+            do Output.println();
+            return;
+        }
+        if(c = String.backSpace()){
+            do Output.backSpace();
+            return;
+        }
+        
+        do Output.print(c);
 
         if(cursorX < 63){
             do Output.moveCursor(cursorY, cursorX + 1);
@@ -279,6 +291,7 @@ class Output {
                 do Output.moveCursor(cursorY - 1, 63);
             }
         }
+        do Output.print(32);
         return;
     }
 }

@@ -21,10 +21,10 @@ class Main {
             let key = Keyboard.keyPressed();
         }
         
-        do Sys.wait(2000);
+        do Sys.wait(10000);
 
         do Output.println();
-        do Output.printString("Time is up. Make sure that 2 seconds elapsed.");
+        do Output.printString("Time is up. Make sure that 10 seconds elapsed.");
         
         return;
     }

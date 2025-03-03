@@ -11,6 +11,9 @@ pop pointer 1
 push that 0
 return
 function Keyboard.readChar 1
+push constant 0
+call Output.print 1
+pop temp 0
 label WHILE_EXP0
 call Keyboard.keyPressed 0
 push constant 0
@@ -19,6 +22,9 @@ not
 if-goto WHILE_END0
 goto WHILE_EXP0
 label WHILE_END0
+push constant 32
+call Output.print 1
+pop temp 0
 call Keyboard.keyPressed 0
 pop local 0
 label WHILE_EXP1
@@ -63,8 +69,16 @@ if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push local 0
+call String.length 1
+push constant 0
+gt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 0
 call String.eraseLastChar 1
 pop temp 0
+label IF_FALSE1
 goto IF_END0
 label IF_FALSE0
 push local 0

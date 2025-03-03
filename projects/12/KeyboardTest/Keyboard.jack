@@ -44,13 +44,17 @@ class Keyboard {
     function char readChar() {
         var char c;
 
+        do Output.print(0);// 显示黑块作为光标
         // 等待键盘按下
         while(Keyboard.keyPressed() = 0){
+            // 这样会影响响应速度，遂放弃
             // do Output.printChar(0);// 显示黑块作为光标
-            // do Sys.wait(200);
+            // do Sys.wait(1000);
             // do Output.backSpace();
-            // do Sys.wait(100);
+            // do Sys.wait(1000);
         }
+        do Output.print(32);// 清除光标
+
         // 获取键盘值
         let c = Keyboard.keyPressed();
         // 等待键盘释放
@@ -74,8 +78,9 @@ class Keyboard {
         // 循环读取键盘字符，读取到回车键或字符串长度达到64时结束循环
         while(~(c = String.newLine()) & (s.length() < 64)){
             if(c = String.backSpace()){
-                // do Output.backSpace();
-                do s.eraseLastChar();
+                if(s.length() > 0){
+                    do s.eraseLastChar();
+                }
             }
             else{
                 do s.appendChar(c);
