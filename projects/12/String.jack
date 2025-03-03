@@ -10,10 +10,16 @@
  * string-oriented operations.
  */
 class String {
+    field int length, maxLen;
+    field Array str;
 
     /** constructs a new empty string with a maximum length of maxLength
      *  and initial length of 0. */
     constructor String new(int maxLength) {
+        let length = 0;
+        let maxLen = maxLength;
+        let str = Array.new(maxLen);
+        return this;
     }
 
     /** Disposes this string. */
@@ -34,6 +40,10 @@ class String {
 
     /** Appends c to this string's end and returns this string. */
     method String appendChar(char c) {
+        if(length < maxLen){
+            let str[length] = c;
+            let length = length + 1;
+        return this;
     }
 
     /** Erases the last character from this string. */
@@ -43,10 +53,56 @@ class String {
     /** Returns the integer value of this string, 
      *  until a non-digit character is detected. */
     method int intValue() {
+        var int val, i;
+        var boolean isNeg;
+
+        let val = 0;
+        let i = 0;
+        let isNeg = false;
+
+        if(str[0] = 45){// 45: '-'
+            let isNeg = true;
+            let i = 1;
+        }
+
+        while(i < length){
+            let val = (val * 10) + (str[i] - 48);
+            let i = i + 1;
+        }
+
+        if(isNeg){
+            let val = -val;
+        }
+
+        return val;
     }
 
     /** Sets this string to hold a representation of the given value. */
     method void setInt(int val) {
+        let len = 0;
+
+        if(val < 0){
+            let val = -val;
+            do appendChar(45);// 45: '-'
+        }
+
+        do setIntA(val);
+        return;
+    }
+
+    method void setIntA(int val){
+        val int num;
+
+        if(val < 10){
+            do appendChar(val + 48);// 48: '0'
+            return;
+        }
+        else{
+            let num = val / 10;
+            do setIntA(num);
+            do appendChar((val - (num * 10)) + 48);// 48: '0'
+        }
+        return;
     }
 
     /** Returns the new line character. */

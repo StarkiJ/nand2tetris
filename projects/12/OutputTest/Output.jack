@@ -194,10 +194,6 @@ class Output {
         var int address, offset, i;
 
         let map = Output.getMap(c);
-        if(map = charMaps[0]){
-            return;
-        }
-
         let address = (cursorY * 352) + (cursorX / 2);// 352=32*11, 2=64/32
         let offset = cursorX & 1;// 一行64个字符，一行32个机器字，因此X轴上一个机器字存两个字符
         let i = 0;

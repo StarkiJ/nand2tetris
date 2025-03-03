@@ -182,8 +182,8 @@ class Output {
     /** Moves the cursor to the j-th column of the i-th row,
      *  and erases the character displayed there. */
     function void moveCursor(int i, int j) {
-        let cursorX = j;
         let cursorY = i;
+        let cursorX = j;
         return;
     }
 
