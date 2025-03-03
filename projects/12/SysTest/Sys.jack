@@ -34,7 +34,7 @@ class Sys {
         let i = 0;
         while(i < duration) {
             let j = 0;
-            while(j < 1055) {
+            while(j < 1050) {
                 // let tmp = (j * j) / (j / j)
                 let j = j + 1;
             }
