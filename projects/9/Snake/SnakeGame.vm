@@ -44,7 +44,7 @@ pop local 0
 push this 0
 call Snake.move 1
 pop temp 0
-push constant 50
+push constant 20
 call Sys.wait 1
 pop temp 0
 goto WHILE_EXP1
@@ -210,7 +210,7 @@ pop local 0
 push this 0
 call Snake.move 1
 pop temp 0
-push constant 50
+push constant 20
 call Sys.wait 1
 pop temp 0
 goto WHILE_EXP2

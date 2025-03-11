@@ -24,7 +24,7 @@ class SnakeGame {
                 let key = Keyboard.keyPressed();
                 //let exit = snake.move();
                 do snake.move();
-                do Sys.wait(50);
+                do Sys.wait(20);
             }
             //do Output.printInt(key);
 
@@ -50,15 +50,15 @@ class SnakeGame {
             // }
             
             //for local lab
-             if (key = 87) { do snake.setDirection(0); }
+             if (key = 87) { do snake.setDirection(0); }// W
 	         else {
-	             if (key = 68) { do snake.setDirection(1); }
+	             if (key = 68) { do snake.setDirection(1); }// D
 		         else {
-                     if (key = 83) { do snake.setDirection(2); }
+                     if (key = 83) { do snake.setDirection(2); }// S
                      else {
-                         if (key = 65) { do snake.setDirection(3); }
+                         if (key = 65) { do snake.setDirection(3); }// A
                          else {
-                          if (key = 131) { 
+                          if (key = 131) { // UP
                                 do snake.lengthen(); 
                                 let length = snake.getLength();
                                 do Output.moveCursor(22,0);
@@ -66,7 +66,7 @@ class SnakeGame {
                                 do Output.printInt(length);
                             }
                             else {
-                                if (key = 133) { 
+                                if (key = 133) { // DOWN
                                     do snake.shorten(); 
                                     let length = snake.getLength();
                                     do Output.moveCursor(22,0);
@@ -74,7 +74,7 @@ class SnakeGame {
                                     do Output.printInt(length);
                                 }
                                 else {
-                                    if (key = 140) { let exit = true; }
+                                    if (key = 140) { let exit = true; }// ESC
                                 }
                             } 
                          }
@@ -87,7 +87,7 @@ class SnakeGame {
                 let key = Keyboard.keyPressed();
                 //let exit = snake.move();
                 do snake.move();
-                do Sys.wait(50);
+                do Sys.wait(20);
             }
         }
 
