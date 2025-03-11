@@ -28,7 +28,7 @@ public class CodeWrite {
         writer.println("// " + command); // 添加原始VM命令作为注释
         switch (command) {
             case "add":// x+y
-                // y=*(SP--)
+                // y=*(--SP)
                 writer.println("@SP");
                 writer.println("AM=M-1");
                 writer.println("D=M");
@@ -51,7 +51,7 @@ public class CodeWrite {
                 writer.println("M=-M");
                 break;
             case "eq":// x=(x==y)
-                // y=*(SP--)
+                // y=*(--SP)
                 writer.println("@SP");
                 writer.println("AM=M-1");
                 writer.println("D=M");

@@ -45,10 +45,11 @@ push constant 16
 call Math.divide 2
 add
 pop local 0
+push constant 2
 push argument 0
 push constant 15
 and
-call Math.powersOfTwo 1
+call Math.power 2
 pop local 1
 push static 1
 if-goto IF_TRUE0
@@ -88,6 +89,222 @@ pop that 0
 label IF_END0
 push constant 0
 return
+function Screen.drawHLine 7
+push argument 0
+push constant 16
+call Math.divide 2
+pop local 4
+push argument 1
+push constant 16
+call Math.divide 2
+pop local 5
+push argument 2
+push constant 32
+call Math.multiply 2
+push local 4
+add
+pop local 0
+push argument 0
+push constant 15
+and
+pop local 1
+push argument 1
+push constant 15
+and
+pop local 2
+push local 4
+push local 5
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 2
+push local 2
+push constant 1
+add
+call Math.power 2
+push constant 2
+push local 1
+call Math.power 2
+sub
+pop local 3
+push static 1
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 0
+push static 0
+add
+push local 0
+push static 0
+add
+pop pointer 1
+push that 0
+push local 3
+or
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+goto IF_END1
+label IF_FALSE1
+push local 0
+push static 0
+add
+push local 0
+push static 0
+add
+pop pointer 1
+push that 0
+push local 3
+not
+and
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+label IF_END1
+goto IF_END0
+label IF_FALSE0
+push constant 2
+push constant 16
+call Math.power 2
+push constant 2
+push local 1
+call Math.power 2
+sub
+pop local 3
+push static 1
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push local 0
+push static 0
+add
+push local 0
+push static 0
+add
+pop pointer 1
+push that 0
+push local 3
+or
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+goto IF_END2
+label IF_FALSE2
+push local 0
+push static 0
+add
+push local 0
+push static 0
+add
+pop pointer 1
+push that 0
+push local 3
+not
+and
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+label IF_END2
+push local 4
+push constant 1
+add
+pop local 6
+push local 0
+push constant 1
+add
+pop local 0
+label WHILE_EXP0
+push local 6
+push local 5
+lt
+not
+if-goto WHILE_END0
+push static 1
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push local 0
+push static 0
+add
+push constant 1
+neg
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+goto IF_END3
+label IF_FALSE3
+push local 0
+push static 0
+add
+push constant 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+label IF_END3
+push local 6
+push constant 1
+add
+pop local 6
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 2
+push local 2
+push constant 1
+add
+call Math.power 2
+push constant 1
+sub
+pop local 3
+push static 1
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push local 0
+push static 0
+add
+push local 0
+push static 0
+add
+pop pointer 1
+push that 0
+push local 3
+or
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+goto IF_END4
+label IF_FALSE4
+push local 0
+push static 0
+add
+push local 0
+push static 0
+add
+pop pointer 1
+push that 0
+push local 3
+not
+and
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+label IF_END4
+label IF_END0
+push constant 0
+return
 function Screen.drawLine 5
 push argument 2
 push argument 0
@@ -97,6 +314,47 @@ push argument 3
 push argument 1
 sub
 pop local 1
+push local 1
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push local 0
+push constant 0
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push argument 0
+push argument 1
+call Screen.drawPixel 2
+pop temp 0
+push constant 0
+return
+label IF_FALSE1
+push local 0
+push constant 0
+gt
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push argument 0
+push argument 2
+push argument 3
+call Screen.drawHLine 3
+pop temp 0
+goto IF_END2
+label IF_FALSE2
+push argument 2
+push argument 0
+push argument 3
+call Screen.drawHLine 3
+pop temp 0
+label IF_END2
+push constant 0
+return
+label IF_FALSE0
 push constant 0
 pop local 2
 push constant 0
@@ -106,15 +364,15 @@ pop local 4
 push local 0
 push constant 0
 gt
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
 push local 1
 push constant 0
 gt
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
 label WHILE_EXP0
 push local 2
 push local 0
@@ -138,9 +396,9 @@ pop temp 0
 push local 4
 push constant 0
 lt
-if-goto IF_TRUE2
-goto IF_FALSE2
-label IF_TRUE2
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
 push local 2
 push constant 1
 add
@@ -149,8 +407,8 @@ push local 4
 push local 1
 add
 pop local 4
-goto IF_END2
-label IF_FALSE2
+goto IF_END5
+label IF_FALSE5
 push local 3
 push constant 1
 add
@@ -159,47 +417,19 @@ push local 4
 push local 0
 sub
 pop local 4
-label IF_END2
+label IF_END5
 goto WHILE_EXP0
 label WHILE_END0
 push constant 0
 return
-label IF_FALSE1
-push local 1
-push constant 0
-eq
-if-goto IF_TRUE3
-goto IF_FALSE3
-label IF_TRUE3
-label WHILE_EXP1
-push local 2
-push local 0
-gt
-not
-not
-if-goto WHILE_END1
-push argument 0
-push local 2
-add
-push argument 1
-call Screen.drawPixel 2
-pop temp 0
-push local 2
-push constant 1
-add
-pop local 2
-goto WHILE_EXP1
-label WHILE_END1
-push constant 0
-return
-label IF_FALSE3
+label IF_FALSE4
 push local 1
 push constant 0
 lt
-if-goto IF_TRUE4
-goto IF_FALSE4
-label IF_TRUE4
-label WHILE_EXP2
+if-goto IF_TRUE6
+goto IF_FALSE6
+label IF_TRUE6
+label WHILE_EXP1
 push local 2
 push local 0
 gt
@@ -210,7 +440,7 @@ lt
 not
 and
 not
-if-goto WHILE_END2
+if-goto WHILE_END1
 push argument 0
 push local 2
 add
@@ -222,9 +452,9 @@ pop temp 0
 push local 4
 push constant 0
 lt
-if-goto IF_TRUE5
-goto IF_FALSE5
-label IF_TRUE5
+if-goto IF_TRUE7
+goto IF_FALSE7
+label IF_TRUE7
 push local 2
 push constant 1
 add
@@ -233,8 +463,8 @@ push local 4
 push local 1
 sub
 pop local 4
-goto IF_END5
-label IF_FALSE5
+goto IF_END7
+label IF_FALSE7
 push local 3
 push constant 1
 sub
@@ -243,29 +473,57 @@ push local 4
 push local 0
 sub
 pop local 4
-label IF_END5
+label IF_END7
+goto WHILE_EXP1
+label WHILE_END1
+push constant 0
+return
+label IF_FALSE6
+label IF_FALSE3
+push local 0
+push constant 0
+eq
+if-goto IF_TRUE8
+goto IF_FALSE8
+label IF_TRUE8
+push local 1
+push constant 0
+gt
+if-goto IF_TRUE9
+goto IF_FALSE9
+label IF_TRUE9
+label WHILE_EXP2
+push local 3
+push local 1
+gt
+not
+not
+if-goto WHILE_END2
+push argument 0
+push argument 1
+push local 3
+add
+call Screen.drawPixel 2
+pop temp 0
+push local 3
+push constant 1
+add
+pop local 3
 goto WHILE_EXP2
 label WHILE_END2
 push constant 0
 return
-label IF_FALSE4
-label IF_FALSE0
-push local 0
-push constant 0
-eq
-if-goto IF_TRUE6
-goto IF_FALSE6
-label IF_TRUE6
+label IF_FALSE9
 push local 1
 push constant 0
-gt
-if-goto IF_TRUE7
-goto IF_FALSE7
-label IF_TRUE7
+lt
+if-goto IF_TRUE10
+goto IF_FALSE10
+label IF_TRUE10
 label WHILE_EXP3
 push local 3
 push local 1
-gt
+lt
 not
 not
 if-goto WHILE_END3
@@ -277,67 +535,82 @@ call Screen.drawPixel 2
 pop temp 0
 push local 3
 push constant 1
-add
+sub
 pop local 3
 goto WHILE_EXP3
 label WHILE_END3
 push constant 0
 return
-label IF_FALSE7
-push local 1
-push constant 0
-eq
-if-goto IF_TRUE8
-goto IF_FALSE8
-label IF_TRUE8
-push argument 0
-push argument 1
-call Screen.drawPixel 2
-pop temp 0
-push constant 0
-return
+label IF_FALSE10
 label IF_FALSE8
-push local 1
+push local 0
 push constant 0
 lt
-if-goto IF_TRUE9
-goto IF_FALSE9
-label IF_TRUE9
-label WHILE_EXP4
-push local 3
+if-goto IF_TRUE11
+goto IF_FALSE11
+label IF_TRUE11
 push local 1
+push constant 0
+gt
+if-goto IF_TRUE12
+goto IF_FALSE12
+label IF_TRUE12
+label WHILE_EXP4
+push local 2
+push local 0
 lt
 not
+push local 3
+push local 1
+gt
+not
+and
 not
 if-goto WHILE_END4
 push argument 0
+push local 2
+add
 push argument 1
 push local 3
 add
 call Screen.drawPixel 2
 pop temp 0
-push local 3
+push local 4
+push constant 0
+lt
+if-goto IF_TRUE13
+goto IF_FALSE13
+label IF_TRUE13
+push local 2
 push constant 1
 sub
+pop local 2
+push local 4
+push local 1
+add
+pop local 4
+goto IF_END13
+label IF_FALSE13
+push local 3
+push constant 1
+add
 pop local 3
+push local 4
+push local 0
+add
+pop local 4
+label IF_END13
 goto WHILE_EXP4
 label WHILE_END4
 push constant 0
 return
-label IF_FALSE9
-label IF_FALSE6
-push local 0
-push constant 0
-lt
-if-goto IF_TRUE10
-goto IF_FALSE10
-label IF_TRUE10
+label IF_FALSE12
 push local 1
 push constant 0
-gt
-if-goto IF_TRUE11
-goto IF_FALSE11
-label IF_TRUE11
+lt
+if-goto IF_TRUE14
+goto IF_FALSE14
+label IF_TRUE14
 label WHILE_EXP5
 push local 2
 push local 0
@@ -345,95 +618,11 @@ lt
 not
 push local 3
 push local 1
-gt
+lt
 not
 and
 not
 if-goto WHILE_END5
-push argument 0
-push local 2
-add
-push argument 1
-push local 3
-add
-call Screen.drawPixel 2
-pop temp 0
-push local 4
-push constant 0
-lt
-if-goto IF_TRUE12
-goto IF_FALSE12
-label IF_TRUE12
-push local 2
-push constant 1
-sub
-pop local 2
-push local 4
-push local 1
-add
-pop local 4
-goto IF_END12
-label IF_FALSE12
-push local 3
-push constant 1
-add
-pop local 3
-push local 4
-push local 0
-add
-pop local 4
-label IF_END12
-goto WHILE_EXP5
-label WHILE_END5
-push constant 0
-return
-label IF_FALSE11
-push local 1
-push constant 0
-eq
-if-goto IF_TRUE13
-goto IF_FALSE13
-label IF_TRUE13
-label WHILE_EXP6
-push local 2
-push local 0
-lt
-not
-not
-if-goto WHILE_END6
-push argument 0
-push local 2
-add
-push argument 1
-call Screen.drawPixel 2
-pop temp 0
-push local 2
-push constant 1
-sub
-pop local 2
-goto WHILE_EXP6
-label WHILE_END6
-push constant 0
-return
-label IF_FALSE13
-push local 1
-push constant 0
-lt
-if-goto IF_TRUE14
-goto IF_FALSE14
-label IF_TRUE14
-label WHILE_EXP7
-push local 2
-push local 0
-lt
-not
-push local 3
-push local 1
-lt
-not
-and
-not
-if-goto WHILE_END7
 push argument 0
 push local 2
 add
@@ -467,12 +656,12 @@ push local 0
 add
 pop local 4
 label IF_END15
-goto WHILE_EXP7
-label WHILE_END7
+goto WHILE_EXP5
+label WHILE_END5
 push constant 0
 return
 label IF_FALSE14
-label IF_FALSE10
+label IF_FALSE11
 push constant 0
 return
 function Screen.drawRectangle 0
@@ -484,10 +673,9 @@ not
 not
 if-goto WHILE_END0
 push argument 0
-push argument 1
 push argument 2
 push argument 1
-call Screen.drawLine 4
+call Screen.drawHLine 3
 pop temp 0
 push argument 1
 push constant 1

@@ -42,12 +42,65 @@ class Screen {
         var int address, mask;
 
         let address = (y * 32) + (x / 16);
-        let mask = Math.powersOfTwo(x & 15);// 2 ^ (x % 16)
+        let mask = Math.power(2, x & 15);// 2 ^ (x % 16)
 
         if(color){
             let screen[address] = screen[address] | mask;
         }else{
             let screen[address] = screen[address] & ~mask;
+        }
+        return;
+    }
+
+    /** Draws a horizontal line */
+    function void drawHLine(int x1, int x2, int y) {
+        var int address, startBit, endBit, mask;
+        var int startWord, endWord, i;
+
+        let startWord = x1 / 16;
+        let endWord = x2 / 16;
+        let address = (y * 32) + startWord;
+        let startBit = x1 & 15;
+        let endBit = x2 & 15;
+
+        if (startWord = endWord) { 
+            // x1 和 x2 在同一个 16-bit 单元内
+            let mask = Math.power(2, endBit + 1) - Math.power(2, startBit);
+            if (color) {
+                let screen[address] = screen[address] | mask;
+            } else {
+                let screen[address] = screen[address] & ~mask;
+            }
+        } 
+        else { 
+            // x1 和 x2 跨多个 16-bit 单元
+            let mask = Math.power(2, 16) - Math.power(2, startBit); 
+            if (color) {
+                let screen[address] = screen[address] | mask;
+            } else {
+                let screen[address] = screen[address] & ~mask;
+            }
+
+            // 直接填充完整的 16-bit 单元
+            let i = startWord + 1;
+            let address = address + 1;
+            while (i < endWord) {
+                if (color) {
+                    let screen[address] = -1;
+                } else {
+                    let screen[address] = 0;
+                }
+                let i = i + 1;
+                let address = address + 1;
+            }
+
+            // 处理最后一个 16-bit 单元
+            let mask = Math.power(2, endBit + 1) - 1;
+            if (color) {
+                let screen[address] = screen[address] | mask;
+            } else {
+                let screen[address] = screen[address] & ~mask;
+            }
         }
         return;
     }
@@ -58,10 +111,25 @@ class Screen {
         
         let dx = x2 - x1;
         let dy = y2 - y1;
+
+        if(dy = 0){
+            if(dx = 0){// 单点
+                do Screen.drawPixel(x1, y1);
+                return;
+            }
+            if(dx > 0){
+                do Screen.drawHLine(x1, x2, y2);
+            }
+            else{
+                do Screen.drawHLine(x2, x1, y2);
+            }
+            return;
+        }
+
         let a = 0;
         let b = 0;
         let diff = 0;// diff = |dy*a| - |dx*b|;
-
+        
         // 实际上屏幕的Y轴向下，因此这里的“向上”实际是“向下”，反之亦然
         if(dx > 0){
             if(dy > 0){// 右上 
@@ -79,13 +147,13 @@ class Screen {
                 return;
             }
 
-            if(dy = 0){// 向右
-                while(~(a > dx)){// a<=dx
-                    do Screen.drawPixel(x1 + a, y1);
-                    let a = a + 1;
-                }
-                return;
-            }
+            // if(dy = 0){// 向右
+            //     while(~(a > dx)){// a<=dx
+            //         do Screen.drawPixel(x1 + a, y1);
+            //         let a = a + 1;
+            //     }
+            //     return;
+            // }
 
             if(dy < 0){ // 右下
                 while(~(a > dx) & ~(b < dy)){// a<=dx & b>=dy
@@ -112,10 +180,10 @@ class Screen {
                 return;
             }
 
-            if(dy = 0){// 单点
-                do Screen.drawPixel(x1, y1);
-                return;
-            }
+            // if(dy = 0){// 单点
+            //     do Screen.drawPixel(x1, y1);
+            //     return;
+            // }
 
             if(dy < 0){// 向下
                 while(~(b < dy)){// b>=dy
@@ -142,13 +210,13 @@ class Screen {
                 return;
             }
 
-            if(dy = 0){// 向左
-                while(~(a < dx)){// a>=dx
-                    do Screen.drawPixel(x1 + a, y1);
-                    let a = a - 1;
-                }
-                return;
-            }
+            // if(dy = 0){// 向左
+            //     while(~(a < dx)){// a>=dx
+            //         do Screen.drawPixel(x1 + a, y1);
+            //         let a = a - 1;
+            //     }
+            //     return;
+            // }
 
             if(dy < 0){// 左下
                 while(~(a < dx) & ~(b < dy)){// a>=dx & b>=dy
@@ -172,7 +240,7 @@ class Screen {
      *  and bottom right corner is (x2,y2), using the current color. */
     function void drawRectangle(int x1, int y1, int x2, int y2) {
         while(~(y1 > y2)){// y1<=y2
-            do Screen.drawLine(x1, y1, x2, y1);
+            do Screen.drawHLine(x1, x2, y1);
             let y1 = y1 + 1;
         }
         return;

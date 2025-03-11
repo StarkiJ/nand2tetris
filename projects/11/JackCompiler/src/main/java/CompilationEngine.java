@@ -146,10 +146,10 @@ public class CompilationEngine {
             compileVarDec();
         }
         vmWriter.writeFunction(className + "." + subName, symbolTable.varCount("var"));
-        if (isConstructor) {
+        if (isConstructor) {// 构造函数需要分配内存
             vmWriter.writePush("constant", symbolTable.varCount("field"));
             vmWriter.writeCall("Memory.alloc", 1);
-            vmWriter.writePop("pointer", 0);
+            vmWriter.writePop("pointer", 0);// 将this指针指向新分配的内存
         }
         if (isMethod) {
             vmWriter.writePush("argument", 0);

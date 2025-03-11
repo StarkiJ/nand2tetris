@@ -169,8 +169,26 @@ class Math
         return false;
     }
 
-    function int powersOfTwo(int i)
-    {
-        return powersOfTwo[i];
+    /** i^j */
+    function int power(int i, int j){
+        var int result, base;
+
+        if(j = 0){
+            return 1;
+        }
+        if(i = 2){
+            return powersOfTwo[j];
+        }
+
+        let result = 1;
+        let base = i;
+        while (j > 0) {
+            if ((j & 1) = 1) { // 如果 j 是奇数
+                let result = result * base;
+            }
+            let base = base * base; // i^(2^k) 递增
+            let j = j / 2; // 右移一位，相当于 j // 2
+        }
+        return result;
     }
 }
