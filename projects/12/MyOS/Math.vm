@@ -364,15 +364,14 @@ push that 0
 and
 push constant 0
 eq
-not
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push constant 0
-not
 return
 label IF_FALSE0
 push constant 0
+not
 return
 function Math.power 2
 push argument 1
