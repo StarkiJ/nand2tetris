@@ -74,7 +74,7 @@ class Screen {
         } 
         else { 
             // x1 和 x2 跨多个 16-bit 单元
-            let mask = Math.power(2, 16) - Math.power(2, startBit); 
+            let mask = -Math.power(2, startBit); 
             if (color) {
                 let screen[address] = screen[address] | mask;
             } else {
@@ -238,17 +238,86 @@ class Screen {
 
     /** Draws a filled rectangle whose top left corner is (x1, y1)
      *  and bottom right corner is (x2,y2), using the current color. */
+    // function void drawRectangle(int x1, int y1, int x2, int y2) {
+    //     while(~(y1 > y2)){// y1<=y2
+    //         do Screen.drawHLine(x1, x2, y1);
+    //         let y1 = y1 + 1;
+    //     }
+    //     return;
+    // }
+
     function void drawRectangle(int x1, int y1, int x2, int y2) {
-        while(~(y1 > y2)){// y1<=y2
-            do Screen.drawHLine(x1, x2, y1);
-            let y1 = y1 + 1;
+        var int address, startBit, endBit, maskLeft, maskRight;
+        var int startWord, endWord, i, tmpAddr;
+
+        let startWord = x1 / 16;
+        let endWord = x2 / 16;
+        let address = (y1 * 32) + startWord;
+        let startBit = x1 & 15;
+        let endBit = x2 & 15;
+
+        if (startWord = endWord) { 
+            // x1 和 x2 在同一个 16-bit 单元内
+            let maskLeft = Math.power(2, endBit + 1) - Math.power(2, startBit);
+            if (color) {
+                while(~(y1 > y2)){
+                    let screen[address] = screen[address] | maskLeft;
+                    let address = address + 32;
+                    let y1 = y1 + 1;
+                }
+            } else {
+                while(~(y1 > y2)){
+                    let screen[address] = screen[address] & ~maskLeft;
+                    let address = address + 32;
+                    let y1 = y1 + 1;
+                }
+            }
+        } 
+        else { 
+            // x1 和 x2 跨多个 16-bit 单元
+            let maskLeft = -Math.power(2, startBit); 
+            let maskRight = Math.power(2, endBit + 1) - 1;
+
+            while(~(y1 > y2)){
+                let tmpAddr = address;
+
+                if (color) {
+                    let screen[tmpAddr] = screen[tmpAddr] | maskLeft;
+                } else {
+                    let screen[tmpAddr] = screen[tmpAddr] & ~maskLeft;
+                }
+    
+                // 直接填充完整的 16-bit 单元
+                let i = startWord + 1;
+                let tmpAddr = tmpAddr + 1;
+                while (i < endWord) {
+                    if (color) {
+                        let screen[tmpAddr] = -1;
+                    } else {
+                        let screen[tmpAddr] = 0;
+                    }
+                    let i = i + 1;
+                    let tmpAddr = tmpAddr + 1;
+                }
+    
+                // 处理最后一个 16-bit 单元
+                if (color) {
+                    let screen[tmpAddr] = screen[tmpAddr] | maskRight;
+                } else {
+                    let screen[tmpAddr] = screen[tmpAddr] & ~maskRight;
+                }
+
+                let address = address + 32;
+                let y1 = y1 + 1;
+            }
         }
         return;
     }
 
+
     /** Draws a filled circle of radius r<=181 around (x,y), using the current color. */
     function void drawCircle(int x, int y, int r) {
-        var int dy, dx;
+        var int dy, dx, rSquared;
 
         if((r < 0) | (r > 181)){
             return;
@@ -258,10 +327,12 @@ class Screen {
             return;
         }
 
-        let dy = -r;
-        while(~(dy > r)){// dy<=r
-            let dx = Math.sqrt((r * r) - (dy * dy));
-            do Screen.drawLine(x-dx, y+dy, x+dx, y+dy);
+        let rSquared = r * r;
+        let dy = 0;
+        while(~(dy > r)){// dy <= r
+            let dx = Math.sqrt(rSquared - (dy * dy));
+            do Screen.drawHLine(x-dx, x+dx, y+dy);
+            do Screen.drawHLine(x-dx, x+dx, y-dy);
             let dy = dy + 1;
         }
         return;

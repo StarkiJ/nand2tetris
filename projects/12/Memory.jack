@@ -44,6 +44,10 @@ class Memory
 
         let ptr = freeList;
         let prev = 0;
+        if (size < 1)
+        {
+            return -1;
+        }
 
         // 最先适应算法
         while (ptr[0] < (size + 3))
@@ -52,7 +56,7 @@ class Memory
             let ptr = ptr[1];
             if (ptr = 0)
             {
-                return 0;
+                return -1;
             }
         }
 
@@ -82,7 +86,8 @@ class Memory
         // return;
 
         // 按顺序排列，并尝试合并
-        var int ptr, prev, tmp;
+
+        var int ptr, prev;
         let ptr = freeList;
         let prev = 0;
         let o = o - 1;
