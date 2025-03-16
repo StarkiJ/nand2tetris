@@ -960,20 +960,15 @@ call Math.multiply 2
 pop local 2
 push constant 0
 pop local 0
+push argument 2
+pop local 1
 label WHILE_EXP0
 push local 0
-push argument 2
+push local 1
 gt
 not
 not
 if-goto WHILE_END0
-push local 2
-push local 0
-push local 0
-call Math.multiply 2
-sub
-call Math.sqrt 1
-pop local 1
 push argument 0
 push local 1
 sub
@@ -993,6 +988,28 @@ push local 1
 add
 push argument 1
 push local 0
+sub
+call Screen.drawHLine 3
+pop temp 0
+push argument 0
+push local 0
+sub
+push argument 0
+push local 0
+add
+push argument 1
+push local 1
+add
+call Screen.drawHLine 3
+pop temp 0
+push argument 0
+push local 0
+sub
+push argument 0
+push local 0
+add
+push argument 1
+push local 1
 sub
 call Screen.drawHLine 3
 pop temp 0
@@ -1000,6 +1017,13 @@ push local 0
 push constant 1
 add
 pop local 0
+push local 2
+push local 0
+push local 0
+call Math.multiply 2
+sub
+call Math.sqrt 1
+pop local 1
 goto WHILE_EXP0
 label WHILE_END0
 push constant 0

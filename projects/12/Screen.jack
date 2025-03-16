@@ -329,11 +329,15 @@ class Screen {
 
         let rSquared = r * r;
         let dy = 0;
-        while(~(dy > r)){// dy <= r
-            let dx = Math.sqrt(rSquared - (dy * dy));
+        let dx = r;
+        // dy <= 根号(r/2)
+        while(~(dy > dx)){
             do Screen.drawHLine(x-dx, x+dx, y+dy);
             do Screen.drawHLine(x-dx, x+dx, y-dy);
+            do Screen.drawHLine(x-dy, x+dy, y+dx);
+            do Screen.drawHLine(x-dy, x+dy, y-dx);
             let dy = dy + 1;
+            let dx = Math.sqrt(rSquared - (dy * dy));
         }
         return;
     }
