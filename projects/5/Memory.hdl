@@ -14,8 +14,8 @@
  * available through the out output from the next time step onward.
  * Address space rules:
  * Only the upper 16K+8K+1 words of the Memory chip are used. 
- * Access to address>0x6000 is invalid. Access to any address in 
- * the range 0x4000-0x5FFF results in accessing the screen memory 
+ * Access to address>0x6000 is invalid and reads 0. Access to any address
+ * in the range 0x4000-0x5FFF results in accessing the screen memory 
  * map. Access to address 0x6000 results in accessing the keyboard 
  * memory map. The behavior in these addresses is described in the Screen
  * and Keyboard chip specifications given in the lectures and the book.
@@ -25,5 +25,18 @@ CHIP Memory {
     OUT out[16];
 
     PARTS:
-	//// Replace this comment with your code.
+    // 0-0x3FFF RAM
+	// 0x4000-0x5FFF Screen
+    // 0x6000 Keyboard
+    DMux(in= load, sel= address[14], a= ram, b= device);
+    DMux(in= device, sel= address[13], a= screen, b= keyboard);
+
+    // write
+    RAM16K(in= in, load= ram, address= address[0..13], out= out0);
+    Screen(in= in, load= screen, address= address[0..12], out= out10);
+    Keyboard(out= out11);
+
+    // out
+    Mux16(a= out10, b= out11, sel= address[13], out= out1);
+    Mux16(a= out0, b= out1, sel= address[14], out= out);
 }

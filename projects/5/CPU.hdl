@@ -32,5 +32,51 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-	//// Replace this comment with your code.
+	// 16位指令，分为地址指令和计算指令
+    // i[15]=0，地址指令: 0 xxxxxxxxxxxxxxx，将i[0..14]存入A
+    // i[15]=1，计算指令: i xx a cccccc ddd jjj
+    // i: 指令类型
+    // a,c: comp，计算种类
+    // d: dest
+    // j: jump
+
+    // Mux16 for A register
+    Mux16(a= instruction, b= outALU, sel= instruction[15], out= inA);
+
+    // A register: 地址指令或d1
+    // Not(in= instruction[15], out= noti);
+    // Or(a= noti, b= instruction[5], out= loadA);
+    Not(in= instruction[5], out= notd1);
+    Nand(a= notd1, b= instruction[15], out= loadA);
+    ARegister(in= inA, load= loadA, out= outA, out[0..14]=addressM);
+
+    // D register: 计算指令且d2
+    And(a= instruction[15], b= instruction[4], out= loadD);
+    DRegister(in= outALU, load= loadD, out= outD);
+    
+    // Mux16 for ALU
+    Mux16(a= outA, b= inM, sel= instruction[12], out= iny);
+    
+    // ALU
+    ALU(x= outD, y= iny, zx= instruction[11], nx= instruction[10], zy= instruction[9], ny= instruction[8], f= instruction[7], no= instruction[6], out= outALU, out=outM, zr= zr, ng= ng);
+
+    // writeM: 计算指令且d3
+    And(a= instruction[15], b= instruction[3], out= writeM);
+
+    // PC
+    And(a= instruction[15], b= instruction[2], out= j1);
+    And(a= instruction[15], b= instruction[1], out= j2);
+    And(a= instruction[15], b= instruction[0], out= j3);
+
+    Or(a= zr, b= ng, out= notpos);
+    Not(in= notpos, out= pos);
+
+    And(a= j1, b= ng, out= lt);
+    And(a= j2, b= zr, out= eq);
+    And(a= j3, b= pos, out= gt);
+
+    Or(a= lt, b= eq, out= out0);
+    Or(a= gt, b= out0, out= jump);
+
+    PC(in= outA, load= jump, inc= true, reset= reset, out[0..14]= pc);
 }
