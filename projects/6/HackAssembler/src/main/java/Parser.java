@@ -7,6 +7,9 @@ public class Parser {
     private String currentLine = "";// 按空格分组的当前行
     private int lineIndex = 0;
     private String instruction;
+    private String dest;
+    private String comp;
+    private String jump;
 
     private static final int NORMAL = 0;  // 正常状态
     private static final int IN_COMMENT = 1;  // 注释内
@@ -26,7 +29,10 @@ public class Parser {
     /**
      * 输入当中还有更多命令吗？
      */
-    public boolean hasMoreCommands() {
+    public boolean hasMoreInstructions() {
+        if (scanner == null) {
+            return false;
+        }
         if (lineIndex < currentLine.length()) {
             return true;
         } else if (scanner.hasNextLine()) {//当前文件还有字符
@@ -35,37 +41,41 @@ public class Parser {
                     .replaceAll("//.*", "")
                     .trim()/*.split("\\s+")*/;
             lineIndex = 0;
-            return hasMoreCommands();
+            return hasMoreInstructions();
         } else {
             scanner.close();
+            scanner = null;
             return false;
         }
     }
 
     /**
      * 从输入中获取下一个命令，使其成为当前命令。
-     * 该函数仅当hasMoreTokens()返回为真时才能调用。
+     * 该函数仅当hasMoreInstructions()返回为真时才能调用。
      * 最初始状态是没有当前命令
      */
     public void advance() {
         instruction = "";
-        while (hasMoreCommands()) {
+        while (hasMoreInstructions()) {
             String currentChar = "" + currentLine.charAt(lineIndex++);
             switch (state) {
                 case NORMAL:
-                    if (currentChar.equals("/") && hasMoreCommands() && currentLine.charAt(lineIndex) == '*') {
+                    if (currentChar.equals("/") && hasMoreInstructions() && currentLine.charAt(lineIndex) == '*') {
                         state = IN_COMMENT;
                     } else if (currentChar.equals(" ")) {
                         if (instruction.isEmpty()) {
                             advance();
                         }
                         return;
+                    } else if (lineIndex == currentLine.length()) {
+                        instruction += currentChar;
+                        return;
                     } else {
                         instruction += currentChar;
                     }
                     break;
                 case IN_COMMENT:
-                    if (currentChar.equals("*") && hasMoreCommands() && currentLine.charAt(lineIndex) == '/') {
+                    if (currentChar.equals("*") && hasMoreInstructions() && currentLine.charAt(lineIndex) == '/') {
                         state = NORMAL;
                         lineIndex++;
                     }
@@ -87,12 +97,36 @@ public class Parser {
      * 当 (Xxx) 中的 Xxx 是符号时
      */
     public String instructionType() {
+        // 先判断是否有命令
+        if (instruction.isEmpty()) {
+            return "";
+        }
+
         if (instruction.charAt(0) == '@') {
             return "A_INSTRUCTION";
+        } else if (instruction.contains("=") || instruction.contains(";")) {
+            if (instruction.contains("=") && instruction.contains(";")) {
+                String[] parts = instruction.split("=");
+                dest = parts[0];
+                parts = parts[1].split(";");
+                comp = parts[0];
+                jump = parts[1];
+            } else if (instruction.contains("=")) {
+                String[] parts = instruction.split("=");
+                dest = parts[0];
+                comp = parts[1];
+                jump = null;
+            } else {
+                String[] parts = instruction.split(";");
+                dest = null;
+                comp = parts[0];
+                jump = parts[1];
+            }
+            return "C_INSTRUCTION";
         } else if (instruction.charAt(0) == '(') {
             return "L_INSTRUCTION";
         } else {
-            return "C_INSTRUCTION";
+            return "UNKNOWN";
         }
     }
 
@@ -110,12 +144,11 @@ public class Parser {
 
     /**
      * 返回当前 C-指令的 dest 助记符 (具有8种可能的形式)
-     * 仅当 commandrype()是 C_INSTRUCTION 时才能调用
+     * 仅当 instructionType()是 C_INSTRUCTION 时才能调用
      */
     public String dest() {
         if (instructionType().equals("C_INSTRUCTION")) {
-            String[] parts = instruction.split("=");
-            return parts.length > 1 ? parts[0] : null;
+            return dest;
         }
         return null;
     }
@@ -126,8 +159,7 @@ public class Parser {
      */
     public String comp() {
         if (instructionType().equals("C_INSTRUCTION")) {
-            String[] parts = instruction.split("=");
-            return parts.length > 1 ? parts[1] : instruction;
+            return comp;
         }
         return null;
     }
@@ -138,8 +170,7 @@ public class Parser {
      */
     public String jump() {
         if (instructionType().equals("C_INSTRUCTION")) {
-            String[] parts = instruction.split(";");
-            return parts.length > 1 ? parts[1] : null;
+            return jump;
         }
         return null;
     }
