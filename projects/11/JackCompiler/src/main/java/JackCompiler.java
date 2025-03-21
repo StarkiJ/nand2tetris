@@ -10,7 +10,7 @@ public class JackCompiler {
 
         // 确保传入的参数是有效的文件路径
         if (args.length != 1) {
-            System.err.println("Usage: java com.starki.JackCompiler <Jack file path>");
+            System.err.println("Usage: java JackCompiler <Jack file path>");
             return;
         }
 
