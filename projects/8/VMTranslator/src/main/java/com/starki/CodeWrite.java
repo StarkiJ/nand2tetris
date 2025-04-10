@@ -35,7 +35,7 @@ public class CodeWrite {
                 // x=x+y
                 writer.println("@SP");
                 writer.println("A=M-1");
-                writer.println("M=M+D");
+                writer.println("M=D+M");
                 break;
             case "sub":// x-y
                 writer.println("@SP");

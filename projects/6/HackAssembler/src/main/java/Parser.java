@@ -90,7 +90,7 @@ public class Parser {
     /**
      * 返回当前命令的类型:
      * A_COMMAND
-     * 当 @Xxx 中的 Xxx 是符号或十进制数字使
+     * 当 @Xxx 中的 Xxx 是符号或十进制数字
      * C_COMMAND
      * 用于 dest=comp;jump
      * L_COMMAND (实际上是伪命令)
