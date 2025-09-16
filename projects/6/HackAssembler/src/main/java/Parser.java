@@ -33,20 +33,7 @@ public class Parser {
         if (scanner == null) {
             return false;
         }
-        if (lineIndex < currentLine.length()) {
-            return true;
-        } else if (scanner.hasNextLine()) {//当前文件还有字符
-            currentLine = scanner.nextLine()
-                    //.replaceAll("//.*|/\\*.*|\\*.*|/\\*/.*", "")
-                    .replaceAll("//.*", "")
-                    .trim()/*.split("\\s+")*/;
-            lineIndex = 0;
-            return hasMoreInstructions();
-        } else {
-            scanner.close();
-            scanner = null;
-            return false;
-        }
+        /*todo */
     }
 
     /**
@@ -59,27 +46,7 @@ public class Parser {
         while (hasMoreInstructions()) {
             String currentChar = "" + currentLine.charAt(lineIndex++);
             switch (state) {
-                case NORMAL:
-                    if (currentChar.equals("/") && hasMoreInstructions() && currentLine.charAt(lineIndex) == '*') {
-                        state = IN_COMMENT;
-                    } else if (currentChar.equals(" ")) {
-                        if (instruction.isEmpty()) {
-                            advance();
-                        }
-                        return;
-                    } else if (lineIndex == currentLine.length()) {
-                        instruction += currentChar;
-                        return;
-                    } else {
-                        instruction += currentChar;
-                    }
-                    break;
-                case IN_COMMENT:
-                    if (currentChar.equals("*") && hasMoreInstructions() && currentLine.charAt(lineIndex) == '/') {
-                        state = NORMAL;
-                        lineIndex++;
-                    }
-                    break;
+                /*todo */
                 default:
                     System.err.println("Invalid state: " + state);
                     return;
@@ -104,30 +71,8 @@ public class Parser {
 
         if (instruction.charAt(0) == '@') {
             return "A_INSTRUCTION";
-        } else if (instruction.contains("=") || instruction.contains(";")) {
-            if (instruction.contains("=") && instruction.contains(";")) {
-                String[] parts = instruction.split("=");
-                dest = parts[0];
-                parts = parts[1].split(";");
-                comp = parts[0];
-                jump = parts[1];
-            } else if (instruction.contains("=")) {
-                String[] parts = instruction.split("=");
-                dest = parts[0];
-                comp = parts[1];
-                jump = null;
-            } else {
-                String[] parts = instruction.split(";");
-                dest = null;
-                comp = parts[0];
-                jump = parts[1];
-            }
-            return "C_INSTRUCTION";
-        } else if (instruction.charAt(0) == '(') {
-            return "L_INSTRUCTION";
-        } else {
-            return "UNKNOWN";
         }
+        /*todo */
     }
 
     /**
@@ -136,8 +81,7 @@ public class Parser {
      */
     public String symbol() {
         return switch (instructionType()) {
-            case "A_INSTRUCTION" -> instruction.substring(1);
-            case "L_INSTRUCTION" -> instruction.substring(1, instruction.length() - 1);
+            /*todo */
             default -> null;
         };
     }
@@ -147,9 +91,7 @@ public class Parser {
      * 仅当 instructionType()是 C_INSTRUCTION 时才能调用
      */
     public String dest() {
-        if (instructionType().equals("C_INSTRUCTION")) {
-            return dest;
-        }
+        /*todo */
         return null;
     }
 
@@ -158,9 +100,7 @@ public class Parser {
      * 仅当 instructionrype()是 C_INSTRUCTION 时才能调用
      */
     public String comp() {
-        if (instructionType().equals("C_INSTRUCTION")) {
-            return comp;
-        }
+        /*todo */
         return null;
     }
 
@@ -169,9 +109,7 @@ public class Parser {
      * 仅当 instructionrype()是 C_INSTRUCTION 时才能调用
      */
     public String jump() {
-        if (instructionType().equals("C_INSTRUCTION")) {
-            return jump;
-        }
+        /*todo */
         return null;
     }
 

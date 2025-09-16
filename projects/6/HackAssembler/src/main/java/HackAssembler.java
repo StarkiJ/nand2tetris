@@ -34,15 +34,7 @@ public class HackAssembler {
         // 检查文件夹是否存在并且是目录
         if (folder.exists() && folder.isDirectory()) {
             File[] files = folder.listFiles((dir, name) -> name.endsWith(".asm"));
-            // 如果有符合条件的文件
-            if (files != null && files.length > 0) {
-                // 遍历文件夹中的每个asm文件
-                for (File file : files) {
-                    assembleFile(filePath + "\\" + file.getName());
-                }
-            } else {
-                System.err.println("Error asm file no found: " + filePath);
-            }
+            /*todo */
         } else {
             System.err.println("Error directory no found: " + filePath);
         }
@@ -73,28 +65,7 @@ public class HackAssembler {
                 parser.advance();
 
                 switch (parser.instructionType()) {
-                    case "A_INSTRUCTION":
-                        System.out.println("A_COMMAND: " + parser.symbol());
-                        // 获取地址
-                        int address;
-                        if (parser.symbol().matches("^[0-9]+$")) {
-                            address = Integer.parseInt(parser.symbol());
-                        } else if (symbolTable.contains(parser.symbol())) {
-                            address = symbolTable.getAddress(parser.symbol());
-                        } else {
-                            symbolTable.addEntry(parser.symbol(), varIndex);
-                            address = varIndex++;
-                        }
-                        // 将地址转换为16位二进制输出，%16s表示将字符串格式化为至少16个字符宽度，如果字符串长度不足16，会自动在左侧填充空格。
-                        writer.println(String.format("%16s", Integer.toBinaryString(address)).replace(' ', '0'));
-                        break;
-                    case "C_INSTRUCTION":
-                        System.out.println("C_COMMAND: " + parser.dest() + ", " + parser.comp() + ", " + parser.jump());
-                        writer.println("111" + Code.comp(parser.comp()) + Code.dest(parser.dest()) + Code.jump(parser.jump()));
-                        break;
-                    case "L_INSTRUCTION":
-                        System.out.println("L_COMMAND: " + parser.symbol());
-                        break;
+                    /*todo */
                     case "":
                         break;
                     case "UNKNOWN":
