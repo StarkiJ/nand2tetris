@@ -6,7 +6,7 @@ public class VMTranslator {
     public static void main(String[] args) {
         // 如果未传入参数，使用默认文件路径
         if (args.length == 0) {
-            args = new String[]{"D:\\code\\nand2tetris\\projects\\9\\Snake\\compiler out"};
+            args = new String[]{""};
         }
 
         // 确保传入的参数是有效的文件路径
@@ -46,17 +46,7 @@ public class VMTranslator {
         // 检查文件夹是否存在并且是目录
         if (folder.exists() && folder.isDirectory()) {
             File[] files = folder.listFiles((dir, name) -> name.endsWith(".vm"));
-            // 如果有符合条件的文件
-            if (files != null && files.length > 0) {
-                CodeWrite codeWriter = new CodeWrite(filePath + "\\" + folder.getName() + ".asm");
-                codeWriter.writeInit();
-                // 遍历文件夹中的每个VM文件
-                for (File file : files) {
-                    processFile(filePath + "\\" + file.getName(), codeWriter);
-                }
-                // 完成所有命令翻译后，关闭文件流
-                codeWriter.close();
-                System.out.println("Translation completed successfully.");
+            /*todo */
             } else {
                 System.err.println("Error VM file no found: " + filePath);
             }
@@ -79,27 +69,7 @@ public class VMTranslator {
                 case "C_ARITHMETIC":
                     codeWriter.writeArithmetic(parser.arg1());
                     break;
-                case "C_PUSH", "C_POP":
-                    codeWriter.writePushPop(commandType, parser.arg1(), parser.arg2());
-                    break;
-                case "C_LABEL":
-                    codeWriter.writeLabel(parser.arg1());
-                    break;
-                case "C_GOTO":
-                    codeWriter.writeGoto(parser.arg1());
-                    break;
-                case "C_IF":
-                    codeWriter.writeIf(parser.arg1());
-                    break;
-                case "C_CALL":
-                    codeWriter.writeCall(parser.arg1(), parser.arg2());
-                    break;
-                case "C_RETURN":
-                    codeWriter.writeReturn();
-                    break;
-                case "C_FUNCTION":
-                    codeWriter.writeFunction(parser.arg1(), parser.arg2());
-                    break;
+                /*todo */
                 case "":
                     break;
                 default:

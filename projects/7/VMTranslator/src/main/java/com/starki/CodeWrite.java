@@ -101,9 +101,7 @@ public class CodeWrite {
 
     // 关闭输出文件
     public void close() {
-        writer.println("(END)");
-        writer.println("@END");
-        writer.println("0;JMP");
+        /*todo */
         writer.close();
     }
 }
