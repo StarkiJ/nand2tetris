@@ -23,28 +23,7 @@ public class CompilationEngine {
     // class: 'class' className '{' classVarDec* subroutineDec* '}'
     public void compileClass() {
         writer.println("<class>");
-        tokenizer.advance();
-        // 'class'
-        writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
-        tokenizer.advance();
-        // className
-        writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
-        tokenizer.advance();
-        // '{'
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
-        // classVarDec*
-        while (tokenizer.getToken().equals("static") || tokenizer.getToken().equals("field")) {
-            compileClassVarDec();
-        }
-        // subroutineDec*
-        while (tokenizer.getToken().equals("constructor") || tokenizer.getToken().equals("function")
-                || tokenizer.getToken().equals("method")) {
-            compileSubroutine();
-        }
-        // '}'
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
+        /*todo */
         writer.println("</class>");
     }
 
@@ -52,76 +31,21 @@ public class CompilationEngine {
     // classVarDec: ('static'|'field') type varName (',' varName)* ';'
     public void compileClassVarDec() {
         writer.println("<classVarDec>");
-        // 'static'|'field'
-        writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
-        tokenizer.advance();
-        // type
-        compileType();
-        // varName
-        writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
-        tokenizer.advance();
-        // (',' varName)*
-        while (tokenizer.getToken().equals(",")) {
-            writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-            tokenizer.advance();
-            writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
-            tokenizer.advance();
-        }
-        // ';'
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
+        /*todo */
         writer.println("</classVarDec>");
     }
 
     // 编译type
     // type: 'int'|'char'|'boolean'|className
     public void compileType() {
-        if (tokenizer.tokenType().equals("KEYWORD")) {
-            // 'int'|'char'|'boolean'
-            writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
-        } else {
-            // className
-            writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
-        }
-        tokenizer.advance();
+        /*todo */
     }
 
     // 编译整个方法、函数或构造函数
     // subroutineDec: ('constructor'|'function'|'method') ('void'|type) subroutineName '(' parameterList ')' subroutineBody
     public void compileSubroutine() {
         writer.println("<subroutineDec>");
-        // 'constructor'|'function'|'method'
-        writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
-        tokenizer.advance();
-        // void|type
-        compileType();
-        // subroutineName
-        writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
-        tokenizer.advance();
-        // '('
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
-        // parameterList
-        compileParameterList();
-        // ')'
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
-
-        // subroutineBody: '{' varDec* statements '}'
-        writer.println("<subroutineBody>");
-        // '{'
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
-        // varDec*
-        while (tokenizer.getToken().equals("var")) {
-            compileVarDec();
-        }
-        // statements
-        compileStatements();
-        // '}'
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
-        writer.println("</subroutineBody>");
+        /*todo */
 
         writer.println("</subroutineDec>");
     }
@@ -130,21 +54,7 @@ public class CompilationEngine {
     // parameterList: (type varName (',' type varName)*)?
     public void compileParameterList() {
         writer.println("<parameterList>");
-        if (tokenizer.tokenType().equals("KEYWORD") || tokenizer.tokenType().equals("IDENTIFIER")) {
-            // type
-            compileType();
-            // varName
-            writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
-            tokenizer.advance();
-            // (',' type varName)*
-            while (tokenizer.getToken().equals(",")) {
-                writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-                tokenizer.advance();
-                compileType();
-                writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
-                tokenizer.advance();
-            }
-        }
+        /*todo */
         writer.println("</parameterList>");
     }
 
@@ -152,24 +62,7 @@ public class CompilationEngine {
     // varDec: 'var' type varName (',' varName)* ';'
     public void compileVarDec() {
         writer.println("<varDec>");
-        // 'var'
-        writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
-        tokenizer.advance();
-        // type
-        compileType();
-        // varName
-        writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
-        tokenizer.advance();
-        // (',' varName)*
-        while (tokenizer.getToken().equals(",")) {
-            writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-            tokenizer.advance();
-            writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
-            tokenizer.advance();
-        }
-        // ';'
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
+        /*todo */
         writer.println("</varDec>");
     }
 
@@ -178,26 +71,7 @@ public class CompilationEngine {
     // statement: letStatement|ifStatement|whileStatement|doStatement|returnStatement
     public void compileStatements() {
         writer.println("<statements>");
-        while (tokenizer.getToken().equals("let") || tokenizer.getToken().equals("if") || tokenizer.getToken().equals("while")
-                || tokenizer.getToken().equals("do") || tokenizer.getToken().equals("return")) {
-            switch (tokenizer.getToken()) {
-                case "let":
-                    compileLet();
-                    break;
-                case "if":
-                    compileIf();
-                    break;
-                case "while":
-                    compileWhile();
-                    break;
-                case "do":
-                    compileDo();
-                    break;
-                case "return":
-                    compileReturn();
-                    break;
-            }
-        }
+        /*todo */
         writer.println("</statements>");
     }
 
@@ -205,69 +79,21 @@ public class CompilationEngine {
     // doStatement: 'do' subroutineCall ';'
     public void compileDo() {
         writer.println("<doStatement>");
-        // 'do'
-        writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
-        tokenizer.advance();
-        // subroutineCall
-        compileSubroutineCall();
-        // ';'
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
+        /*todo */
         writer.println("</doStatement>");
     }
 
     //编译subroutineCall
     // subroutineCall: subroutineName '(' expressionList ')'|(className|varName) '.' subroutineName '(' expressionList ')'
     public void compileSubroutineCall() {
-        // subroutineName | (className | varName)
-        writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
-        tokenizer.advance();
-        if (tokenizer.getToken().equals(".")) {
-            // '.'
-            writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-            tokenizer.advance();
-            // subroutineName
-            writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
-            tokenizer.advance();
-        }
-        // '('
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
-        // expressionList
-        compileExpressionList();
-        // ')'
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
+        /*todo */
     }
 
     // 编译let语句
     // letStatement: 'let' varName ('[' expression ']')? '=' expression ';'
     public void compileLet() {
         writer.println("<letStatement>");
-        // 'let'
-        writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
-        tokenizer.advance();
-        // varName
-        writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
-        tokenizer.advance();
-        if (tokenizer.getToken().equals("[")) {
-            // '['
-            writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-            tokenizer.advance();
-            // expression
-            compileExpression();
-            // ']'
-            writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-            tokenizer.advance();
-        }
-        // '='
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
-        // expression
-        compileExpression();
-        // ';'
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
+        /*todo */
         writer.println("</letStatement>");
     }
 
@@ -275,25 +101,7 @@ public class CompilationEngine {
     // whileStatement: 'while' '(' expression ')' '{' statements '}'
     public void compileWhile() {
         writer.println("<whileStatement>");
-        // 'while'
-        writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
-        tokenizer.advance();
-        // '('
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
-        // expression
-        compileExpression();
-        // ')'
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
-        // '{'
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
-        // statements
-        compileStatements();
-        // '}'
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
+        /*todo */
         writer.println("</whileStatement>");
     }
 
@@ -301,16 +109,7 @@ public class CompilationEngine {
     // returnStatement: 'return' expression? ';'
     public void compileReturn() {
         writer.println("<returnStatement>");
-        // 'return'
-        writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
-        tokenizer.advance();
-        if (!tokenizer.getToken().equals(";")) {
-            // expression
-            compileExpression();
-        }
-        // ';'
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
+        /*todo */
         writer.println("</returnStatement>");
     }
 
@@ -318,38 +117,7 @@ public class CompilationEngine {
     // ifStatement: 'if' '(' expression ')' '{' statements '}' ('else' '{' statements '}')?
     public void compileIf() {
         writer.println("<ifStatement>");
-        // 'if'
-        writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
-        tokenizer.advance();
-        // '('
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
-        // expression
-        compileExpression();
-        // ')'
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
-        // '{'
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
-        // statements
-        compileStatements();
-        // '}'
-        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-        tokenizer.advance();
-        if (tokenizer.getToken().equals("else")) {
-            // 'else'
-            writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
-            tokenizer.advance();
-            // '{'
-            writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-            tokenizer.advance();
-            // statements
-            compileStatements();
-            // '}'
-            writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-            tokenizer.advance();
-        }
+        /*todo */
         writer.println("</ifStatement>");
     }
 
@@ -357,15 +125,7 @@ public class CompilationEngine {
     // expression: term (op term)*
     public void compileExpression() {
         writer.println("<expression>");
-        // term
-        compileTerm();
-        while (op.contains(tokenizer.getToken())) {
-            // op: '+' | '-' | '*' | '/' | '&' | '|' | '<' | '>' | '='
-            writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-            tokenizer.advance();
-            // term
-            compileTerm();
-        }
+        /*todo */
         writer.println("</expression>");
     }
 
@@ -379,66 +139,7 @@ public class CompilationEngine {
     public void compileTerm() {
         writer.println("<term>");
         switch (tokenizer.tokenType()) {
-            // integerConstant | stringConstant | keywordConstant
-            case "INT_CONST":
-                writer.println("<integerConstant> " + tokenizer.intVal() + " </integerConstant>");
-                tokenizer.advance();
-                break;
-            case "STRING_CONST":
-                writer.println("<stringConstant> " + tokenizer.stringVal() + " </stringConstant>");
-                tokenizer.advance();
-                break;
-            case "KEYWORD":
-                writer.println("<keyword> " + tokenizer.keyword() + " </keyword>");
-                tokenizer.advance();
-                break;
-            // varName | varName '[' expression ']' | subroutineCall
-            case "IDENTIFIER":
-                switch (tokenizer.peekNextToken()) {
-                    // varName '[' expression ']'
-                    case "[":
-                        // varName
-                        writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
-                        tokenizer.advance();
-                        // '['
-                        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-                        tokenizer.advance();
-                        // expression
-                        compileExpression();
-                        // ']'
-                        writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-                        tokenizer.advance();
-                        break;
-                    // subroutineCall
-                    case "(", ".":
-                        compileSubroutineCall();
-                        break;
-                    // varName
-                    default:
-                        writer.println("<identifier> " + tokenizer.identifier() + " </identifier>");
-                        tokenizer.advance();
-                        break;
-                }
-                break;
-            // '(' expression ')' | (unaryOp term)
-            case "SYMBOL":
-                if (tokenizer.getToken().equals("(")) {
-                    // '('
-                    writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-                    tokenizer.advance();
-                    // expression
-                    compileExpression();
-                    // ')'
-                    writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-                    tokenizer.advance();
-                } else if (unaryOp.contains(tokenizer.getToken())) {
-                    // unaryOp: '-' | '~'
-                    writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-                    tokenizer.advance();
-                    // term
-                    compileTerm();
-                }
-                break;
+            /*todo */
             default:
                 System.err.println("Invalid term type: " + tokenizer.tokenType());
                 break;
@@ -450,17 +151,7 @@ public class CompilationEngine {
     // expressionList: (expression (',' expression)* )?
     public void compileExpressionList() {
         writer.println("<expressionList>");
-        if (!tokenizer.getToken().equals(")")) {
-            // expression
-            compileExpression();
-            while (tokenizer.getToken().equals(",")) {
-                // ','
-                writer.println("<symbol> " + tokenizer.symbol() + " </symbol>");
-                tokenizer.advance();
-                // expression
-                compileExpression();
-            }
-        }
+        /*todo */
         writer.println("</expressionList>");
     }
 }

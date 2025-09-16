@@ -44,19 +44,7 @@ public class JackTokenizer {
 
     // 输入中是否还有字元？
     private boolean hasMoreTokens() {
-        if (lineIndex < currentLine.length()) {
-            return true;
-        } else if (scanner.hasNextLine()) {//当前文件还有字符
-            currentLine = scanner.nextLine()
-                    //.replaceAll("//.*|/\\*.*|\\*.*|/\\*/.*", "")
-                    .replaceAll("//.*", "")
-                    .trim()/*.split("\\s+")*/;
-            lineIndex = 0;
-            return hasMoreTokens();
-        } else {
-            // scanner.close();
-            return false;
-        }
+        /*todo */
     }
 
     // 提前查看下一个字元
@@ -68,17 +56,8 @@ public class JackTokenizer {
     // 该函数仅当hasMoreTokens()返回为真时才能调用。
     // 最初始状态是没有当前字元
     public void advance() {
-        if (!tokenQueue.isEmpty()) {
-            currentToken = tokenQueue.poll();
-        }
+        /*todo */
     }
-//    public void advance() {
-//        if (tokenQueue.isEmpty() && hasMoreTokens()) {
-//            advancePre();
-//            tokenQueue.offer(currentToken);
-//        }
-//        currentToken = tokenQueue.poll();
-//    }
 
     // 预处理
     private void advancePre() {
@@ -87,43 +66,7 @@ public class JackTokenizer {
         while (hasMoreTokens()) {
             String currentChar = "" + currentLine.charAt(lineIndex++);
             switch (state) {
-                case NORMAL:
-                    if (currentChar.equals("/") && hasMoreTokens() && currentLine.charAt(lineIndex) == '*') {
-                        state = IN_COMMENT;
-                    } else if (symbols.contains(currentChar)) {// 如果当前字符是符号
-                        if (currentToken.isEmpty()) { // 之前没有字符，则将符号作为字元
-                            //currentTokenType = "SYMBOL";
-                            currentToken = currentChar;
-                        } else { // 之前有字符，则将之前字符作为字元，并回退一格
-                            lineIndex--;
-                        }
-                        return;
-                    } else if (currentChar.equals("\"")) {// 如果当前字符是双引号，则读取字符串
-                        state = IN_QUOTE;
-                        currentToken = "\"";
-                        //currentTokenType = "STRING_CONST";
-                    } else if (currentChar.equals(" ")) {
-                        if (currentToken.isEmpty()) {
-                            advancePre();
-                        }
-                        return;
-                    } else {
-                        currentToken += currentChar;
-                    }
-                    break;
-                case IN_QUOTE:
-                    currentToken += currentChar;
-                    if (currentChar.equals("\"")) {
-                        state = NORMAL;
-                        return;
-                    }
-                    break;
-                case IN_COMMENT:
-                    if (currentChar.equals("*") && hasMoreTokens() && currentLine.charAt(lineIndex) == '/') {
-                        state = NORMAL;
-                        lineIndex++;
-                    }
-                    break;
+                /*todo */
                 default:
                     System.err.println("Invalid state: " + state);
                     return;
@@ -133,64 +76,38 @@ public class JackTokenizer {
 
     // 返回当前字元的类型
     public String tokenType() {
-        if (keywords.contains(currentToken)) {
-            return "KEYWORD";
-        } else if (symbols.contains(currentToken)) {
-            return "SYMBOL";
-        } else if (currentToken.startsWith("\"")) {
-            return "STRING_CONST";
-        } else if (currentToken.matches("[0-9]+")) {
-            return "INT_CONST";
-        } else {
-            return "IDENTIFIER";
-        }
+        /*todo */
     }
-//    public String tokenType() {
-//        if (currentTokenType == null) {
-//            if (keywords.contains(currentToken)) {
-//                currentTokenType = "KEYWORD";
-//            } else if (symbols.contains(currentToken)) {
-//                currentTokenType = "SYMBOL";
-//            } else if (currentToken.startsWith("\"")) {
-//                currentTokenType = "STRING_CONST";
-//            } else if (currentToken.matches("[0-9]+")) {
-//                currentTokenType = "INT_CONST";
-//            } else {
-//                currentTokenType = "IDENTIFIER";
-//            }
-//        }
-//        return currentTokenType;
-//    }
 
     // 返回当前字元的关键字。
     // 仅当tokenType()的返回值为KEYWORD时才能被调用
     public String keyword() {
-        return currentToken;
+        /*todo */
     }
 
     // 返回当前字元的字符。
     // 仅当tokenType()的返回值为SYMBOL时才能被调用
     public String symbol() {
         // 如果是符号，则替换掉特殊字符
-        return replaceSymbols.getOrDefault(currentToken, currentToken);
+        /*todo */
     }
 
     // 返回当前字元的标识符。
     // 仅当tokenType()的返回值为IDENTIFIER时才能被调用
     public String identifier() {
-        return currentToken;
+        /*todo */
     }
 
     // 返回当前字元的整数值。
     // 仅当tokenType()的返回值为INT_CONST时才能被调用
     public int intVal() {
-        return Integer.parseInt(currentToken);
+        /*todo */
     }
 
     // 返回当前字元的字符串值。
     // 仅当tokenType()的返回值为STRING_CONST时才能被调用
     public String stringVal() {
-        return currentToken.substring(1, currentToken.length() - 1);
+        /*todo */
     }
 
     // 返回当前字元
@@ -218,18 +135,7 @@ public class JackTokenizer {
                 case "KEYWORD":
                     writerT.println("<keyword> " + keyword() + " </keyword>");
                     break;
-                case "SYMBOL":
-                    writerT.println("<symbol> " + symbol() + " </symbol>");
-                    break;
-                case "IDENTIFIER":
-                    writerT.println("<identifier> " + identifier() + " </identifier>");
-                    break;
-                case "INT_CONST":
-                    writerT.println("<integerConstant> " + intVal() + " </integerConstant>");
-                    break;
-                case "STRING_CONST":
-                    writerT.println("<stringConstant> " + stringVal() + " </stringConstant>");
-                    break;
+                /*todo */
                 default:
                     System.err.println("Invalid token type: " + tokenType());
                     break;
