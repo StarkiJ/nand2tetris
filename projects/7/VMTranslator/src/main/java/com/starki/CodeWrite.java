@@ -40,106 +40,7 @@ public class CodeWrite {
                 writer.println("A=M-1");
                 writer.println("M=M+D");
                 break;
-            case "sub":// x-y
-                writer.println("@SP");
-                writer.println("AM=M-1");
-                writer.println("D=M");
-                writer.println("@SP");
-                writer.println("A=M-1");
-                writer.println("M=M-D");
-                break;
-            case "neg":// y=-y
-                writer.println("@SP");
-                writer.println("A=M-1");
-                writer.println("M=-M");
-                break;
-            case "eq":// x=(x==y)
-                // y=*(SP--)
-                writer.println("@SP");
-                writer.println("AM=M-1");
-                writer.println("D=M");
-                // D=x-y
-                writer.println("@SP");
-                writer.println("A=M-1");
-                writer.println("D=M-D");
-                // if (x==y) goto EQ_TRUE
-                writer.println("@EQ_TRUE_" + count);
-                writer.println("D;JEQ");
-                // else x=0
-                writer.println("@SP");
-                writer.println("A=M-1");
-                writer.println("M=0");
-                // goto EQ_END
-                writer.println("@EQ_END_" + count);
-                writer.println("0;JMP");
-                // EQ_TRUE: x=1(全1)
-                writer.println("(EQ_TRUE_" + count + ")");
-                writer.println("@SP");
-                writer.println("A=M-1");
-                writer.println("M=-1");
-                writer.println("(EQ_END_" + (count++) + ")");
-                break;
-            case "gt":// x=(x>y)
-                writer.println("@SP");
-                writer.println("AM=M-1");
-                writer.println("D=M");
-                writer.println("@SP");
-                writer.println("A=M-1");
-                writer.println("D=M-D");
-                writer.println("@GT_TRUE_" + count);
-                writer.println("D;JGT");
-                writer.println("@SP");
-                writer.println("A=M-1");
-                writer.println("M=0");
-                writer.println("@GT_END_" + count);
-                writer.println("0;JMP");
-                writer.println("(GT_TRUE_" + count + ")");
-                writer.println("@SP");
-                writer.println("A=M-1");
-                writer.println("M=-1");
-                writer.println("(GT_END_" + (count++) + ")");
-                break;
-            case "lt":// x=(x<y)
-                writer.println("@SP");
-                writer.println("AM=M-1");
-                writer.println("D=M");
-                writer.println("@SP");
-                writer.println("A=M-1");
-                writer.println("D=M-D");
-                writer.println("@LT_TRUE_" + count);
-                writer.println("D;JLT");
-                writer.println("@SP");
-                writer.println("A=M-1");
-                writer.println("M=0");
-                writer.println("@LT_END_" + count);
-                writer.println("0;JMP");
-                writer.println("(LT_TRUE_" + count + ")");
-                writer.println("@SP");
-                writer.println("A=M-1");
-                writer.println("M=-1");
-                writer.println("(LT_END_" + (count++) + ")");
-                break;
-            case "and":// x=x&y
-                writer.println("@SP");
-                writer.println("AM=M-1");
-                writer.println("D=M");
-                writer.println("@SP");
-                writer.println("A=M-1");
-                writer.println("M=D&M");
-                break;
-            case "or":// x=x|y
-                writer.println("@SP");
-                writer.println("AM=M-1");
-                writer.println("D=M");
-                writer.println("@SP");
-                writer.println("A=M-1");
-                writer.println("M=D|M");
-                break;
-            case "not":// !y
-                writer.println("@SP");
-                writer.println("A=M-1");
-                writer.println("M=!M");
-                break;
+            /*todo */
             default:
                 System.err.println("Invalid arithmetic command: " + command);
                 break;
@@ -156,46 +57,7 @@ public class CodeWrite {
                     writer.println("@" + index);
                     writer.println("D=A");
                     break;
-                case "local":// x=*(LCL+index)
-                    writer.println("@" + index);
-                    writer.println("D=A");
-                    writer.println("@LCL");
-                    writer.println("A=D+M");
-                    writer.println("D=M");
-                    break;
-                case "argument":
-                    writer.println("@" + index);
-                    writer.println("D=A");
-                    writer.println("@ARG");
-                    writer.println("A=D+M");
-                    writer.println("D=M");
-                    break;
-                case "this":
-                    writer.println("@" + index);
-                    writer.println("D=A");
-                    writer.println("@THIS");
-                    writer.println("A=D+M");
-                    writer.println("D=M");
-                    break;
-                case "that":
-                    writer.println("@" + index);
-                    writer.println("D=A");
-                    writer.println("@THAT");
-                    writer.println("A=D+M");
-                    writer.println("D=M");
-                    break;
-                case "pointer":// x=*(THIS+index)=*(3+index)
-                    writer.println("@R" + (index + 3));
-                    writer.println("D=M");
-                    break;
-                case "temp":// x=*(5+index)
-                    writer.println("@R" + (index + 5));
-                    writer.println("D=M");
-                    break;
-                case "static":// x=*(fileName.index)
-                    writer.println("@" + fileName + "." + index);
-                    writer.println("D=M");
-                    break;
+                /*todo */
                 default:
                     System.err.println("Invalid segment: " + segment);
                     break;
@@ -227,69 +89,7 @@ public class CodeWrite {
                     writer.println("A=M");
                     writer.println("M=D");
                     break;
-                case "argument":
-                    writer.println("@" + index);
-                    writer.println("D=A");
-                    writer.println("@ARG");
-                    writer.println("D=D+M");
-                    writer.println("@R13");
-                    writer.println("M=D");
-                    writer.println("@SP");
-                    writer.println("AM=M-1");
-                    writer.println("D=M");
-                    writer.println("@R13");
-                    writer.println("A=M");
-                    writer.println("M=D");
-                    break;
-                case "this":
-                    writer.println("@" + index);
-                    writer.println("D=A");
-                    writer.println("@THIS");
-                    writer.println("D=D+M");
-                    writer.println("@R13");
-                    writer.println("M=D");
-                    writer.println("@SP");
-                    writer.println("AM=M-1");
-                    writer.println("D=M");
-                    writer.println("@R13");
-                    writer.println("A=M");
-                    writer.println("M=D");
-                    break;
-                case "that":
-                    writer.println("@" + index);
-                    writer.println("D=A");
-                    writer.println("@THAT");
-                    writer.println("D=D+M");
-                    writer.println("@R13");
-                    writer.println("M=D");
-                    writer.println("@SP");
-                    writer.println("AM=M-1");
-                    writer.println("D=M");
-                    writer.println("@R13");
-                    writer.println("A=M");
-                    writer.println("M=D");
-                    break;
-                case "pointer":// *(3+index)=*(--SP)
-                    writer.println("@SP");
-                    writer.println("AM=M-1");
-                    writer.println("D=M");
-                    writer.println("@R" + (index + 3));
-                    writer.println("M=D");
-                    break;
-                case "temp":// *(5+index)=*(--SP)
-                    writer.println("@SP");
-                    writer.println("AM=M-1");
-                    writer.println("D=M");
-                    writer.println("@R" + (index + 5));
-                    writer.println("M=D");
-                    break;
-                case "static":// *(fileName.index)=*(--SP)
-                    writer.println("@SP");
-                    writer.println("AM=M-1");
-                    writer.println("D=M");
-                    writer.println("@" + fileName + "." + index);
-                    writer.println("M=D");
-                    break;
+                /*todo */
                 default:
                     System.err.println("Invalid segment: " + segment);
                     break;

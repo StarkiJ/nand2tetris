@@ -34,13 +34,7 @@ public class VMTranslator {
 
             String commandType = parser.commandType(); // 获取当前命令的类型
 
-            if (commandType.equals("C_ARITHMETIC")) {
-                // 如果是算术命令，写入相应的汇编代码
-                codeWriter.writeArithmetic(parser.arg1());
-            } else if (commandType.equals("C_PUSH") || commandType.equals("C_POP")) {
-                // 如果是推送或弹出命令，写入相应的汇编代码
-                codeWriter.writePushPop(commandType, parser.arg1(), parser.arg2());
-            }
+            /*todo */
         }
 
         // 完成所有命令翻译后，关闭文件流
