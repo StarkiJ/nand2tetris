@@ -30,60 +30,29 @@ public class SymbolTable {
     // type: "int" | "char" | "boolean" | 类名
     // kind: "static" | "field" | "arg" | "var"
     public void define(String name, String type, String kind) {
-        switch (kind) {
-            case "static":
-                classTable.put(name, new Object[]{type, "static", staticIndex++});
-                break;
-            case "field":
-                classTable.put(name, new Object[]{type, "this", fieldIndex++});
-                break;
-            case "arg":
-                subroutineTable.put(name, new Object[]{type, "argument", argIndex++});
-                break;
-            case "var":
-                subroutineTable.put(name, new Object[]{type, "local", varIndex++});
-                break;
-        }
+        /*todo */
     }
 
     // 返回已经定义在当前作用域内的变量的数量
     public int varCount(String kind) {
-        return switch (kind) {
-            case "static" -> staticIndex;
-            case "field" -> fieldIndex;
-            case "arg" -> argIndex;
-            case "var" -> varIndex;
-            default -> -1;
-        };
+        /*todo */
     }
 
     // 返回当前作用域内的标识符的种类。如果该标识符在当前作用域内是未知的，那么返回NONE
     public String kindOf(String name) {
-        if (subroutineTable.containsKey(name)) {
-            return (String) subroutineTable.get(name)[1];
-        } else if (classTable.containsKey(name)) {
-            return (String) classTable.get(name)[1];
-        }
+        /*todo */
         return "NONE";
     }
 
     // 返回当前作用域内的标识符的类型
     public String typeOf(String name) {
-        if (subroutineTable.containsKey(name)) {
-            return (String) subroutineTable.get(name)[0];
-        } else if (classTable.containsKey(name)) {
-            return (String) classTable.get(name)[0];
-        }
+        /*todo */
         return "NONE";
     }
 
     // 返回标识符的索引
     public int indexOf(String name) {
-        if (subroutineTable.containsKey(name)) {
-            return (int) subroutineTable.get(name)[2];
-        } else if (classTable.containsKey(name)) {
-            return (int) classTable.get(name)[2];
-        }
+        /*todo */
         return -1;
     }
 }

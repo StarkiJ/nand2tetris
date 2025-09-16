@@ -15,47 +15,47 @@ public class VMWriter {
 
     // 写入VM push命令
     public void writePush(String segment, int index) {
-        writer.println("push " + segment + " " + index);
+        /*todo */
     }
 
     // 写入VM pop命令
     public void writePop(String segment, int index) {
-        writer.println("pop " + segment + " " + index);
+        /*todo */
     }
 
     // 写入VM arithmetic命令
     public void writeArithmetic(String command) {
-        writer.println(command);
+        /*todo */
     }
 
     // 写入VM label命令
     public void writeLabel(String label) {
-        writer.println("label " + label);
+        /*todo */
     }
 
     // 写入VM goto命令
     public void writeGoto(String label) {
-        writer.println("goto " + label);
+        /*todo */
     }
 
     // 写入VM if-goto命令
     public void writeIf(String label) {
-        writer.println("if-goto " + label);
+        /*todo */
     }
 
     // 写入VM call命令
     public void writeCall(String name, int nArgs) {
-        writer.println("call " + name + " " + nArgs);
+        /*todo */
     }
 
     // 写入VM function命令
     public void writeFunction(String name, int nVars) {
-        writer.println("function " + name + " " + nVars);
+        /*todo */
     }
 
     // 写入VM return命令
     public void writeReturn() {
-        writer.println("return");
+        /*todo */
     }
 
     // 关闭输出文件
