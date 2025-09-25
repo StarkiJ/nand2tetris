@@ -2,135 +2,98 @@
 
  Nand to Tetris
 
-## Project 1: Boolean Logic
+---
 
-**Background**:
-A typical computer architecture is based on a set of elementary logic gates like And, Or, Mux, etc., as well as their bit-wise versions And16, Or16, Mux16, etc. (assuming a 16-bit machine). This project engages you in the construction of a typical set of basic logic gates. These gates form the elementary building blocks from which we will later construct the computer's CPU and RAM.
+## Project 6: The Assembler 汇编器
 
-**Objective**:
-Build all the logic gates described in Chapter 1 (see list below), yielding a basic chip-set. The only building blocks that you can use in this project are primitive Nand gates and the composite gates that you will gradually build on top of them.
+实验目标：开发一个汇编器，把Hack汇编语言翻译成Hack二进制语言。
+
+测试方式：
+1. 设置projects\6\HackAssembler\src\main\java\HackAssembler.java中的目标文件，分别将Add.asm, Max.asm, Rect.asm, Pong.asm翻译成二进制文件（*.hack）。
+2. 打开tools\CPUEmulator.bat，点击Load Program按钮，将翻译的二进制文件导入CPU模拟器中。
+3. 运行程序，验证其功能正确性与系统稳定性。
+
+提示：
+1. 可以将CPU模拟器的Animate项设置为No animate，以此加快程序运行速度。
+2. 你也可以选择将汇编器打包成可执行文件，以参数的形式选择目标文件。
 
 ---
 
-## Project 2: Boolean Arithmetic
+## Project 7: Virtual Machine I - Stack Arithmetic 虚拟机I
 
-**Background**:
-The centerpiece of the computer's architecture is the CPU, or Central Processing Unit, and the centerpiece of the CPU is the ALU, or Arithmetic-Logic Unit. In this project you will gradually build a set of chips, culminating in the construction of the ALU chip of the Hack computer. All the chips built in this project are standard, except for the ALU itself, which differs from one computer architecture to another.
+实验目标：开发一个虚拟机翻译器，把虚拟机字节码中的算术逻辑命令和push/pop命令翻译成Hack汇编语言。
 
-**Objective**:
-Build all the chips described in Chapter 2 (see list below), leading up to an Arithmetic Logic Unit - the Hack computer's ALU. The only building blocks that you can use are the chips described in chapter 1 and the chips that you will gradually build in this project.
+测试方式：
+1. 设置projects\7\VMTranslator\src\main\java\com\starki\VMTranslator.java中的目标文件，将虚拟机字节码文件（*.vm）翻译成汇编文件（*.asm）。
+2. 打开tools\CPUEmulator.bat，点击Load Program按钮，将翻译的汇编文件导入CPU模拟器中。
+3. 点击Load Script按钮，将对应的测试文件（*.tst）导入。
+4. 运行程序，查看下方测试结果信息。
 
----
-
-## Project 3: Memory
-
-**Background**:
-The computer's main memory, also called Random Access Memory, or RAM, is an addressable sequence of n-bit registers, each designed to hold an n-bit value. In this project you will gradually build a RAM unit. This involves two main issues: (i) how to use gate logic to store bits persistently, over time, and (ii) how to use gate logic to locate ("address") the memory register on which we wish to operate.
-
-**Objective**:
-Build all the chips described in Chapter 3 (see list below), leading up to a Random Access Memory (RAM) unit. The only building blocks that you can use are primitive DFF gates, chips that you will build on top of them, and chips described in previous chapters.
+提示：
+1. 可以将CPU模拟器的Animate项设置为No animate，以此加快程序运行速度。
+2. 你也可以选择将虚拟机翻译器打包成可执行文件，以参数的形式选择目标文件。
+3. 建议先通过StackArithmetic中的测试，再进行MemoryAccess中的测试。
 
 ---
 
-## Project 4: Machine Language Programming
+## Project 8: Virtual Machine II - Program Control 虚拟机II
 
-LOC: 112 = 86 + 36
+实验目标：完善上一个实验中的虚拟机翻译器。
 
-**Background**:
-Every hardware platform is designed to execute commands in a certain machine language, expressed using agreed-upon binary codes. Writing programs directly in binary code is a possible, yet unnecessary. Instead, we can write such programs using a low-level symbolic language, called assembly, and have them translated into binary code by a program called assembler. In this project you will write some low-level assembly programs, and will be forever thankful for high-level languages like Java and Python. (Actually, assembly programming can be highly rewarding, allowing direct and complete control of the underlying machine.)
+测试方式：
+1. 设置projects\8\VMTranslator\src\main\java\com\starki\VMTranslator.java中的目标文件，将虚拟机字节码文件（*.vm）翻译成汇编文件（*.asm）。
+2. 打开tools\CPUEmulator.bat，点击Load Program按钮，将翻译的汇编文件导入CPU模拟器中。
+3. 点击Load Script按钮，将对应的测试文件（*.tst）导入。
+4. 运行程序，查看下方测试结果信息。
 
-**Objective**:
-To get a taste of low-level programming in machine language, and to get acquainted with the Hack computer platform. In the process of working on this project, you will become familiar with the assembly process - translating from symbolic language to machine-language - and you will appreciate visually how native binary code executes on the target hardware platform. These lessons will be learned in the context of writing and testing two low-level programs, as follows.
-
----
-
-## Project 5: Computer Architecture
-
-**Background**:
-In previous projects we've built the computer's basic processing and storage devices (ALU and RAM, respectively). In this project we will put everything together, yielding the complete Hack Hardware Platform. The result will be a general-purpose computer that can run programs written in the Hack machine language.
-
-**Objective**:
-Complete the construction of the Hack CPU and the Hack hardware platform, leading up to the top-most Computer chip.
+提示：
+1. 可以将CPU模拟器的Animate项设置为No animate，以此加快程序运行速度。
+2. 你也可以选择将虚拟机翻译器打包成可执行文件，以参数的形式选择目标文件。
+3. 建议先通过ProgramFlow中的测试，再进行FunctionCalls中的测试。
+4. 对于有多个虚拟机字节码文件的测试项，你需要把将它们翻译成一个汇编文件，并保证运行的第一个函数是Sys.init。
 
 ---
 
-## Project 6: The Assembler
+## Project 10: Compiler I - Syntax Analysis 编译器I
 
-LOC: 383 = 75 + 100 + 166 + 42
+实验目标：开发一个编译器，实现Jack语言的语法分析，输出XML格式的分析结果。
 
-**Background**:
-Low-level machine programs are rarely written by humans. Typically, they are generated by compilers. Yet humans can inspect the translated code and learn important lessons about how to write their high-level programs better, in a way that avoids low-level pitfalls and exploits the underlying hardware better. One of the key players in this translation process is the assembler -- a program designed to translate code written in a symbolic machine language into code written in binary machine language.
+测试方式：
+1. 设置projects\10\JackCompiler\src\main\java\JackAnalyzer.java中的目标文件，读取Jack语言文件（*.jack），输出语法分析结果（*.xml）。
+2. 将语法分析结果与参考文件进行对比。
 
-​This project marks an exciting landmark in our Nand to Tetris odyssey: it deals with building the first rung up the software hierarchy, which will eventually end up in the construction of a compiler for a Java-like high-level language. But, first things first.
-
-**Objective**:
-Write an Assembler program that translates programs written in the symbolic Hack assembly language into binary code that can execute on the Hack hardware platform built in the previous projects.
-
----
-
-## Project 7: Virtual Machine I - Stack Arithmetic
-
-LOC: 420 = 302 + 78 + 40
-
-**Background**:
-Java (or C#) compilers generate code written in an intermediate language called bytecode (or IL). This code is designed to run on a virtual machine architecture like the JVM (or CLR). One way to implement such VM programs is to translate them further into lower-level programs written in the machine language of some concrete (rather than virtual) host computer. In projects 7 and 8 we build such a VM translator, designed to translate programs written in the VM language into programs written in the Hack assembly language. The VM language, abstraction, and translation process are described in chapters 7 and 8 of the book. For the purpose of this project, chapter 8 can be ignored.
-
-**Objective**:
-Build a basic VM translator, focusing on the implementation of the VM language's stack arithmetic and memory accesscommands. In Project 8, this basic translator will be extended into a full-scale VM translator.
+提示：
+1. 你也可以选择将编译器打包成可执行文件，以参数的形式选择目标文件。
 
 ---
 
-## Project 8: Virtual Machine II - Program Control
+## Project 11: Compiler II - Code Generation 编译器II
 
-LOC: 599 = 418 + 86 + 95
+实验目标：完善上一个实验中的编译器，将Jack语言翻译成虚拟机字节码。
 
-**Background**:
-We continue building the VM translator - a program that translates programs written in the VM language into programs written in the Hack machine language. This is a respectable chunk of engineering, so we are doing it in two stages. Welcome to stage II.
+测试方式：
+1. 设置projects\11\JackCompiler\src\main\java\JackCompiler.java中的目标文件，将Jack语言文件（*.jack）翻译成虚拟机字节码文件(*.vm)。
+2. 打开tools\VMEmulator.bat，点击Load Program按钮，将翻译的虚拟机字节码文件导入VM模拟器中。
+3. 运行程序，验证其功能正确性与系统稳定性。
 
-**Objective**:
-Extend the basic VM translator built in project 7 into a full-scale VM translator. In particular, in project 7 we focused on handling the stack arithmetic and memory access commands of the VM language. We now turn to handle the VM language's branching and function calling commands.
-
----
-
-## Project 9: High-Level Programming
-
-LOC: 337 = 10 + 83 + 149 + 95
-
-**Background**:
-This project introduces Jack - a simple, Java-like, object-based programming language. Before building a Jack compiler in projects 10-11, it makes sense to become familiar with the language itself. That's the main purpose of this project. And... there is also the thrill of writing a little computer game in a cool little language.
-
-**Objective**:
-Adopt or invent an application idea like a simple computer game or some other interactive program. Examples include Tetris, Snake, Hangman, Space Invaders, Sokoban, Pong, etc. Your job is to implement this application in Jack. You don't have to create a complete application. For example, you can create a basic version, or part of, some simple game or cool interaction.
+提示：
+1. 可以将CPU模拟器的Animate项设置为No animate，以此加快程序运行速度。
+2. 你也可以选择将编译器打包成可执行文件，以参数的形式选择目标文件。
+3. 当程序存在多个虚拟机字节码文件时，需要将导入目标设置为整个文件夹。
 
 ---
 
-## Project 10: Compiler I - Syntax Analysis
+## Project 12: The Operating System 操作系统
 
-LOC: 748 = 446 + 72 + 230
+实验目标：实现一个操作系统，以支持各项基本功能。
 
-**Background**:
-The Jack compiler, like those of Java and C#, is two-tiered: the compiler's front-end translates from the high-level language to an intermediate VM language; the compiler's back-end translates further from the VM language to the native code of the host platform. In projects 7-8 we've built the compiler's back-end (the VM translator); we now turn to building the compiler's front-end. This development will span two projects: syntax analysis (this project), and code generation (next project). Welcome to syntax analysis.
+测试方式：
+1. 执行 JackCompiler.bat [目标文件]，将操作系统和测试项目的Jack语言文件翻译成虚拟机字节码文件。
+2. 打开tools\VMEmulator.bat，点击Load Program按钮，将翻译的虚拟机字节码文件导入VM模拟器中。
+3. 运行程序，验证其功能正确性与系统稳定性。
 
-**Objective**:
-In this project we build a syntax analyzer that parses Jack programs according to the Jack grammar, producing an XML file that renders the program's structure using marked-up text. In the next project, the logic that generates the XML output will be morphed into logic that generates VM code.
-
----
-
-## Project 11: Compiler II - Code Generation
-
-LOC: 1038 = 615 + 55 + 234 + 81 + 53
-
-**Background**:
-In this project we complete the construction of the Jack Compiler that we started building in the previous project.
-
----
-
-## Project 12: The Operating System
-
-LOC: 1164 = 23 + 92 + 197 + 117 + 265 + 303 + 120 + 47
-
-**Background**:
-An Operating System (OS) is a collection of software services, designed to close gaps between the computer's hardware and application software. For example, if you use a high-level langauge to write a program that prompts the user to enter some data using the keyboard, the code generated by the compiler will include (among other things) calls to OS routines that handle keyboard inputs. Therefore, the OS can also be viewed as an extension of a high-level programming language. This is a rather simplistic view of operating systems, but it will suffice for our purpose.
-
-**Objective**:
-Implement the Jack OS specified in Chapter 12. In the process of building this OS, you will implement a modular collection of some beautiful algorithms in applied computer science. Thus, you will also be exposed, hands-on, to some cool computer science stuff.
+提示：
+1. 可以将CPU模拟器的Animate项设置为No animate，以此加快程序运行速度。
+2. 当程序存在多个虚拟机字节码文件时，需要将导入目标设置为整个文件夹。
+3. 在初次测试时，可以使用tools\OS中的操作系统文件，仅将测试项对应的文件替换成自己写的，以控制变量。
+4. 你也可以使用自己的编译器来替代JackCompiler.bat。
