@@ -2,98 +2,81 @@
 
  Nand to Tetris
 
+使用 **C++17** 与 **CMake** 构建
+
+在nand2TetrisCpp目录下，每一个项目都有自己的README文件。
+
 ---
 
 ## Project 6: The Assembler 汇编器
 
 实验目标：开发一个汇编器，把Hack汇编语言翻译成Hack二进制语言。
 
-测试方式：
-1. 设置projects\6\HackAssembler\src\main\java\HackAssembler.java中的目标文件，分别将Add.asm, Max.asm, Rect.asm, Pong.asm翻译成二进制文件（*.hack）。
-2. 打开tools\CPUEmulator.bat，点击Load Program按钮，将翻译的二进制文件导入CPU模拟器中。
-3. 运行程序，验证其功能正确性与系统稳定性。
+### 代码设计思路
 
-提示：
-1. 可以将CPU模拟器的Animate项设置为No animate，以此加快程序运行速度。
-2. 你也可以选择将汇编器打包成可执行文件，以参数的形式选择目标文件。
+1. **两遍解析器 (Two-pass Assembler)**
 
----
+   * **第一遍**：扫描 `(LABEL)` 指令，记录标签符号对应的 ROM 地址。
+   * **第二遍**：将每条 `A` / `C` 指令翻译成 16 位二进制代码。
+2. **符号表管理**
 
-## Project 7: Virtual Machine I - Stack Arithmetic 虚拟机I
+   * 预定义符号：`SP, LCL, ARG, THIS, THAT, R0–R15, SCREEN, KBD`。
+   * 变量符号：自动从 RAM 地址 16 开始分配。
+3. **C 指令解析**
 
-实验目标：开发一个虚拟机翻译器，把虚拟机字节码中的算术逻辑命令和push/pop命令翻译成Hack汇编语言。
-
-测试方式：
-1. 设置projects\7\VMTranslator\src\main\java\com\starki\VMTranslator.java中的目标文件，将虚拟机字节码文件（*.vm）翻译成汇编文件（*.asm）。
-2. 打开tools\CPUEmulator.bat，点击Load Program按钮，将翻译的汇编文件导入CPU模拟器中。
-3. 点击Load Script按钮，将对应的测试文件（*.tst）导入。
-4. 运行程序，查看下方测试结果信息。
-
-提示：
-1. 可以将CPU模拟器的Animate项设置为No animate，以此加快程序运行速度。
-2. 你也可以选择将虚拟机翻译器打包成可执行文件，以参数的形式选择目标文件。
-3. 建议先通过StackArithmetic中的测试，再进行MemoryAccess中的测试。
+   * `dest=comp;jump` 三段式拆解，使用查表法翻译 comp/jump 字段。
 
 ---
 
-## Project 8: Virtual Machine II - Program Control 虚拟机II
+## Project 7–8: VM Translator
 
-实验目标：完善上一个实验中的虚拟机翻译器。
+Project 7: Virtual Machine I - Stack Arithmetic 虚拟机I
+Project 8: Virtual Machine II - Program Control 虚拟机II
 
-测试方式：
-1. 设置projects\8\VMTranslator\src\main\java\com\starki\VMTranslator.java中的目标文件，将虚拟机字节码文件（*.vm）翻译成汇编文件（*.asm）。
-2. 打开tools\CPUEmulator.bat，点击Load Program按钮，将翻译的汇编文件导入CPU模拟器中。
-3. 点击Load Script按钮，将对应的测试文件（*.tst）导入。
-4. 运行程序，查看下方测试结果信息。
+**虚拟机翻译器：VM → Hack ASM**
 
-提示：
-1. 可以将CPU模拟器的Animate项设置为No animate，以此加快程序运行速度。
-2. 你也可以选择将虚拟机翻译器打包成可执行文件，以参数的形式选择目标文件。
-3. 建议先通过ProgramFlow中的测试，再进行FunctionCalls中的测试。
-4. 对于有多个虚拟机字节码文件的测试项，你需要把将它们翻译成一个汇编文件，并保证运行的第一个函数是Sys.init。
+将 VM 字节码翻译为 Hack 汇编指令，实现堆栈运算、流程控制与函数调用。
 
----
+1. **指令分类**
 
-## Project 10: Compiler I - Syntax Analysis 编译器I
+   * **算术逻辑命令**：`add`, `sub`, `neg`, `eq`, `gt`, `lt`, `and`, `or`, `not`
+   * **内存访问命令**：`push/pop segment index`
+   * **程序控制命令**：`label`, `goto`, `if-goto`
+   * **函数调用约定**：`function`, `call`, `return`
+2. **模块化结构**
 
-实验目标：开发一个编译器，实现Jack语言的语法分析，输出XML格式的分析结果。
+   * 每条命令类型对应独立的翻译函数。
+   * `CodeWriter` 负责输出 `.asm`。
+   * 当输入目录时，自动生成带引导代码 (`Sys.init`) 的单一输出。
 
-测试方式：
-1. 设置projects\10\JackCompiler\src\main\java\JackAnalyzer.java中的目标文件，读取Jack语言文件（*.jack），输出语法分析结果（*.xml）。
-2. 将语法分析结果与参考文件进行对比。
+在 `CPUEmulator` 中运行 `.asm` 或 `.tst` 脚本。
 
-提示：
-1. 你也可以选择将编译器打包成可执行文件，以参数的形式选择目标文件。
+### 推荐测试顺序
 
----
-
-## Project 11: Compiler II - Code Generation 编译器II
-
-实验目标：完善上一个实验中的编译器，将Jack语言翻译成虚拟机字节码。
-
-测试方式：
-1. 设置projects\11\JackCompiler\src\main\java\JackCompiler.java中的目标文件，将Jack语言文件（*.jack）翻译成虚拟机字节码文件(*.vm)。
-2. 打开tools\VMEmulator.bat，点击Load Program按钮，将翻译的虚拟机字节码文件导入VM模拟器中。
-3. 运行程序，验证其功能正确性与系统稳定性。
-
-提示：
-1. 可以将CPU模拟器的Animate项设置为No animate，以此加快程序运行速度。
-2. 你也可以选择将编译器打包成可执行文件，以参数的形式选择目标文件。
-3. 当程序存在多个虚拟机字节码文件时，需要将导入目标设置为整个文件夹。
+1. **StackArithmetic** → 算术逻辑测试
+2. **MemoryAccess** → 内存段映射
+3. **ProgramFlow** → 程序控制
+4. **FunctionCalls** → 函数调用（需要保证运行的第一个函数是Sys.init）
 
 ---
 
-## Project 12: The Operating System 操作系统
+## Project 10–11: Jack Compiler
 
-实验目标：实现一个操作系统，以支持各项基本功能。
+Project 10: Compiler I - Syntax Analysis 编译器I
+Project 11: Compiler II - Code Generation 编译器II
 
-测试方式：
-1. 执行 JackCompiler.bat [目标文件]，将操作系统和测试项目的Jack语言文件翻译成虚拟机字节码文件。
-2. 打开tools\VMEmulator.bat，点击Load Program按钮，将翻译的虚拟机字节码文件导入VM模拟器中。
-3. 运行程序，验证其功能正确性与系统稳定性。
+编写一个 Jack 语言编译器，将高级语言翻译为 VM 字节码。
+支持完整的类结构、方法调用、控制语句与表达式。
 
-提示：
-1. 可以将CPU模拟器的Animate项设置为No animate，以此加快程序运行速度。
-2. 当程序存在多个虚拟机字节码文件时，需要将导入目标设置为整个文件夹。
-3. 在初次测试时，可以使用tools\OS中的操作系统文件，仅将测试项对应的文件替换成自己写的，以控制变量。
-4. 你也可以使用自己的编译器来替代JackCompiler.bat。
+| 模块                  | 功能描述                           |
+| ------------------- | ------------------------------ |
+| `JackTokenizer`     | 词法分析：分离关键字、符号、标识符、字符串、整数常量。    |
+| `CompilationEngine` | 语法分析与代码生成：递归下降法构建语法树并输出 `.vm`。 |
+| `SymbolTable`       | 管理变量作用域与索引号（class/subroutine）。 |
+| `VMWriter`          | 将 VM 指令写入输出文件。                 |
+| `XmlPrinter`        | 输出语法树 XML 文件。              |
+
+编译器由 `JackCompiler.cpp` 驱动，支持：
+
+* 单文件或目录编译；
+* `--xml` 选项输出 XML 调试结果（`Foo.xml`, `FooT.xml`）。
