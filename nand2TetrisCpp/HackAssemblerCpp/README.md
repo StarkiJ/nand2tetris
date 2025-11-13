@@ -92,22 +92,6 @@ Assemble a directory of `.asm` files (non-recursive):
 * **`Code`**
   纯静态映射：`comp/dest/jump` 助记符 → 指定位宽的二进制字符串。`comp` 返回 7 位（含 a 位），`dest/jump` 各 3 位。
 
-### 数据流与控制流
-
-```mermaid
-flowchart TD
-  subgraph I[Input]
-    A1[".asm file(s)"]
-  end
-
-  P1[preprocess_lines: strip comments & blank]
-  P2[Parser: detect A/C/L, split dest=comp;jump]
-  S1[Pass 1: collect (LABEL)->ROM addr in SymbolTable]
-  S2[Pass 2: resolve @symbol (predef/label/var), encode via Code, write .hack]
-
-  A1 --> P1 --> P2 --> S1 --> S2
-```
-
 ---
 
 ## File/Code Structure（代码结构要点）
