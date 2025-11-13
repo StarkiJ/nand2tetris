@@ -11,32 +11,33 @@ enum class InstrType { A_INSTR, C_INSTR, L_INSTR, UNKNOWN };
 // -----------------------------
 class SymbolTable {
 public:
+  /**
+   * 构造函数：创建空的符号表
+   * 仅预置 SP，其余留空待完成
+   */
   SymbolTable() {
     // Predefined symbols
+    // 预置符号表
     table_["SP"] = 0;
-    table_["LCL"] = 1;
-    table_["ARG"] = 2;
-    table_["THIS"] = 3;
-    table_["THAT"] = 4;
-    for (int r = 0; r <= 15; ++r) {
-      table_["R" + to_string(r)] = r;
-    }
-    table_["SCREEN"] = 16384;
-    table_["KBD"] = 24576;
+    /*todo */
   }
 
-  bool contains(const string &sym) const {
-    return table_.find(sym) != table_.end();
-  }
+  /**
+   * 判断 symbol 是否在符号表中
+   */
+  bool contains(const string &sym) const { /*todo */ return false; }
 
-  int get(const string &sym) const {
-    auto it = table_.find(sym);
-    if (it == table_.end())
-      throw runtime_error("Symbol not found: " + sym);
-    return it->second;
-  }
+  /**
+   * 返回符号表中 symbol 关联的地址
+   * 
+   */
+  int get(const string &sym) const { /*todo */ return 0; }
 
-  void add(const string &sym, int addr) { table_[sym] = addr; }
+  /**
+   * 将 (symbol, address) 配对加入符号表
+   * 
+   */
+  void add(const string &sym, int addr) { /*todo */ (void)sym; (void)addr; }
 
 private:
   unordered_map<string, int> table_;
@@ -47,69 +48,39 @@ private:
 // -----------------------------
 class Code {
 public:
+  /**
+   * 返回 dest 助记符对应的二进制码 (3位)
+   * 
+   */
   static string dest(const string &d) {
     // order: A D M
-    bool A = false, D = false, M = false;
-    for (char c : d) {
-      if (c == 'A')
-        A = true;
-      else if (c == 'D')
-        D = true;
-      else if (c == 'M')
-        M = true;
-    }
-    string s;
-    s.push_back(A ? '1' : '0');
-    s.push_back(D ? '1' : '0');
-    s.push_back(M ? '1' : '0');
-    return s;
+    /*todo */
+    return "000";
   }
 
+  /**
+   * 返回 jump 助记符对应的二进制码 (3位)
+   * 
+   */
   static string jump(const string &j) {
-    if (j.empty())
-      return "000";
-    static const unordered_map<string, string> mp = {
-        {"JGT", "001"}, {"JEQ", "010"}, {"JGE", "011"}, {"JLT", "100"},
-        {"JNE", "101"}, {"JLE", "110"}, {"JMP", "111"}};
-    auto it = mp.find(j);
-    if (it == mp.end())
-      throw runtime_error("Invalid jump: " + j);
-    return it->second;
+    if (j.empty()) return "000";
+    if (j == "JGT") return "001";
+    /*todo */
+    throw runtime_error("Invalid jump: " + j);
   }
 
+  /**
+   * 返回 comp 助记符对应的二进制码 (7位)
+   * 
+   */
   static string comp(const string &c) {
     // returns 7 bits: a c1 c2 c3 c4 c5 c6
     static const unordered_map<string, string> mp = {
         // a=0 set
         {"0", "0101010"},
         {"1", "0111111"},
-        {"-1", "0111010"},
-        {"D", "0001100"},
-        {"A", "0110000"},
-        {"!D", "0001101"},
-        {"!A", "0110001"},
-        {"-D", "0001111"},
-        {"-A", "0110011"},
-        {"D+1", "0011111"},
-        {"A+1", "0110111"},
-        {"D-1", "0001110"},
-        {"A-1", "0110010"},
-        {"D+A", "0000010"},
-        {"D-A", "0010011"},
-        {"A-D", "0000111"},
-        {"D&A", "0000000"},
-        {"D|A", "0010101"},
-        // a=1 set (use M instead of A)
-        {"M", "1110000"},
-        {"!M", "1110001"},
-        {"-M", "1110011"},
-        {"M+1", "1110111"},
-        {"M-1", "1110010"},
-        {"D+M", "1000010"},
-        {"D-M", "1010011"},
-        {"M-D", "1000111"},
-        {"D&M", "1000000"},
-        {"D|M", "1010101"}};
+        /* todo */
+    };
     auto it = mp.find(c);
     if (it == mp.end())
       throw runtime_error("Invalid comp: " + c);

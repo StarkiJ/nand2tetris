@@ -1,37 +1,55 @@
 #include "VMWriter.hpp"
 #include <stdexcept>
 
+// NOTE: This file is a student skeleton. Fill all TODOs.
+
 VMWriter::VMWriter(const std::string &file_name) {
-  out_.open(file_name);
-  if (!out_)
-    throw std::runtime_error("Cannot open output vm: " + file_name);
+  // TODO: open output stream for writing
+  throw std::logic_error("TODO(VMWriter::VMWriter)");
 }
-VMWriter::~VMWriter() { close(); }
+
+VMWriter::~VMWriter() {
+  // TODO: close the stream
+  throw std::logic_error("TODO(VMWriter::~VMWriter)");
+}
 
 void VMWriter::writePush(const std::string &segment, int index) {
-  out_ << "push " << segment << " " << index << "\n";
+  // TODO: emit `push <segment> <index>`
+  throw std::logic_error("TODO(VMWriter::writePush)");
 }
 void VMWriter::writePop(const std::string &segment, int index) {
-  out_ << "pop " << segment << " " << index << "\n";
+  // TODO: emit `pop <segment> <index>`
+  throw std::logic_error("TODO(VMWriter::writePop)");
 }
-void VMWriter::writeArithmetic(const std::string &cmd) { out_ << cmd << "\n"; }
+void VMWriter::writeArithmetic(const std::string &cmd) {
+  // TODO: emit arithmetic/logic VM command
+  throw std::logic_error("TODO(VMWriter::writeArithmetic)");
+}
 void VMWriter::writeLabel(const std::string &label) {
-  out_ << "label " << label << "\n";
+  // TODO: emit `label <label>`
+  throw std::logic_error("TODO(VMWriter::writeLabel)");
 }
 void VMWriter::writeGoto(const std::string &label) {
-  out_ << "goto " << label << "\n";
+  // TODO: emit `goto <label>`
+  throw std::logic_error("TODO(VMWriter::writeGoto)");
 }
 void VMWriter::writeIf(const std::string &label) {
-  out_ << "if-goto " << label << "\n";
+  // TODO: emit `if-goto <label>`
+  throw std::logic_error("TODO(VMWriter::writeIf)");
 }
 void VMWriter::writeCall(const std::string &name, int nArgs) {
-  out_ << "call " << name << " " << nArgs << "\n";
+  // TODO: emit `call <name> <nArgs>`
+  throw std::logic_error("TODO(VMWriter::writeCall)");
 }
 void VMWriter::writeFunction(const std::string &name, int nLocals) {
-  out_ << "function " << name << " " << nLocals << "\n";
+  // TODO: emit `function <name> <nLocals>`
+  throw std::logic_error("TODO(VMWriter::writeFunction)");
 }
-void VMWriter::writeReturn() { out_ << "return\n"; }
+void VMWriter::writeReturn() {
+  // TODO: emit `return`
+  throw std::logic_error("TODO(VMWriter::writeReturn)");
+}
 void VMWriter::close() {
-  if (out_.is_open())
-    out_.close();
+  // TODO: actually close the stream if open
+  throw std::logic_error("TODO(VMWriter::close)");
 }

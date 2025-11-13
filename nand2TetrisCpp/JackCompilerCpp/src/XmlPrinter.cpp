@@ -1,81 +1,28 @@
 #include "XmlPrinter.hpp"
 #include <stdexcept>
 
-static std::string toLower(std::string s) {
-  for (char &c : s)
-    if (c >= 'A' && c <= 'Z')
-      c = char(c - 'A' + 'a');
-  return s;
-}
-
+// NOTE: This file is a student skeleton. Fill all TODOs.
 XmlPrinter::XmlPrinter(const std::string &file_name) {
-  out_.open(file_name);
-  if (!out_)
-    throw std::runtime_error("Cannot open XML file: " + file_name);
+  // TODO: open XML output file
+  throw std::logic_error("TODO(XmlPrinter::XmlPrinter)");
 }
 
 XmlPrinter::~XmlPrinter() {
-  while (!stack_.empty())
-    closeTag();
-  if (out_.is_open())
-    out_.close();
-}
-
-void XmlPrinter::indent() {
-  for (int i = 0; i < indent_; ++i)
-    out_ << "  ";
-}
-
-std::string XmlPrinter::escape(const std::string &s) {
-  std::string r;
-  r.reserve(s.size() + 8);
-  for (char c : s) {
-    if (c == '<')
-      r += "&lt;";
-    else if (c == '>')
-      r += "&gt;";
-    else if (c == '&')
-      r += "&amp;";
-    else
-      r.push_back(c);
-  }
-  return r;
+  // TODO: close any open tags and file
+  throw std::logic_error("TODO(XmlPrinter::~XmlPrinter)");
 }
 
 void XmlPrinter::openTag(const std::string &name) {
-  indent();
-  out_ << "<" << name << ">\n";
-  stack_.push_back(name);
-  indent_++;
+  // TODO: increase indent and write <name>
+  throw std::logic_error("TODO(XmlPrinter::openTag)");
 }
 
 void XmlPrinter::closeTag() {
-  if (stack_.empty())
-    return;
-  indent_--;
-  indent();
-  out_ << "</" << stack_.back() << ">\n";
-  stack_.pop_back();
+  // TODO: decrease indent and write </name>
+  throw std::logic_error("TODO(XmlPrinter::closeTag)");
 }
 
 void XmlPrinter::token(const std::string &type, const std::string &value) {
-  // Match nand2tetris token tags: keyword / symbol / identifier /
-  // integerConstant / stringConstant
-  std::string tag;
-  std::string t = toLower(type);
-  if (t == "keyword")
-    tag = "keyword";
-  else if (t == "symbol")
-    tag = "symbol";
-  else if (t == "identifier")
-    tag = "identifier";
-  else if (t == "int_const" || t == "int")
-    tag = "integerConstant";
-  else if (t == "string_const" || t == "string")
-    tag = "stringConstant";
-  else
-    tag = type;
-
-  indent();
-  out_ << "<" << tag << "> " << escape(value) << " </" << tag << ">\n";
+  // TODO: write a token element with proper tag mapping and escaping
+  throw std::logic_error("TODO(XmlPrinter::token)");
 }

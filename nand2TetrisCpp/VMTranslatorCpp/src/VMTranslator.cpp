@@ -50,10 +50,7 @@ int main(int argc, char **argv) {
 
   try {
     CodeWriter writer(out_path.string());
-    // If directory (multi-file), include bootstrap.
-    if (std::filesystem::is_directory(in)) {
-      writer.writeInit();
-    }
+    /*todo*/ // 目录模式是否需要 bootstrap?
 
     for (const auto &f : files) {
       Parser parser(f.string());
@@ -63,24 +60,8 @@ int main(int argc, char **argv) {
         auto type = parser.commandType();
         if (type == "C_ARITHMETIC") {
           writer.writeArithmetic(parser.arg1());
-        } else if (type == "C_PUSH" || type == "C_POP") {
-          writer.writePushPop(type, parser.arg1(), parser.arg2());
-        } else if (type == "C_LABEL") {
-          writer.writeLabel(parser.arg1());
-        } else if (type == "C_GOTO") {
-          writer.writeGoto(parser.arg1());
-        } else if (type == "C_IF") {
-          writer.writeIf(parser.arg1());
-        } else if (type == "C_FUNCTION") {
-          writer.writeFunction(parser.arg1(), parser.arg2());
-        } else if (type == "C_CALL") {
-          writer.writeCall(parser.arg1(), parser.arg2());
-        } else if (type == "C_RETURN") {
-          writer.writeReturn();
-        } else if (type == "") {
-          // skip
         } else {
-          cerr << "Unsupported command type: " << type << "\n";
+          /*todo*/ // 其余分派：push/pop/label/goto/if/function/call/return
         }
         parser.advance();
       }
