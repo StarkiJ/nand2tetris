@@ -31,6 +31,7 @@
 ## Project 7–8: VM Translator
 
 Project 7: Virtual Machine I - Stack Arithmetic 虚拟机I
+
 Project 8: Virtual Machine II - Program Control 虚拟机II
 
 **虚拟机翻译器：VM → Hack ASM**
@@ -63,6 +64,7 @@ Project 8: Virtual Machine II - Program Control 虚拟机II
 ## Project 10–11: Jack Compiler
 
 Project 10: Compiler I - Syntax Analysis 编译器I
+
 Project 11: Compiler II - Code Generation 编译器II
 
 编写一个 Jack 语言编译器，将高级语言翻译为 VM 字节码。
